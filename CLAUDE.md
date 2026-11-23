@@ -4,9 +4,19 @@
 
 @AGENTS.md
 
-## Claude Code 전용
+## 진행 절차와 현재 상태
 
-- 진행 절차: @docs/PROCESS.md
-- 새 기능은 Explore → Plan → Code → Verify → Commit 순서로 진행한다 (docs/PROCESS.md 4단계).
-- 작업 단위가 바뀌면 `/clear`로 컨텍스트를 비우고, 이어서 할 내용은 `docs/plans/`의 계획 문서에 남긴다.
-- 커스텀 명령: `.claude/commands/` (`/plan`, `/adr`, `/review`)
+@docs/PROCESS.md
+
+@docs/STATUS.md
+
+## 진행 규칙 (Claude Code)
+
+- 이 프로젝트는 사람(결정권자)과 Claude(진행·실행 담당)가 역할을 나눠 PROCESS.md 절차대로 진행한다. 사람이 단계를 지시하지 않아도 Claude가 STATUS.md를 기준으로 다음 행동을 먼저 꺼낸다.
+- 세션의 첫 응답에서는 STATUS.md와 진행 중 계획 문서를 확인해 현재 위치를 한두 줄로 브리핑한다. 사용자가 다른 요청으로 시작했다면 그 요청을 먼저 처리하고 브리핑은 짧게 덧붙인다.
+- 사용자가 "이어서 하자", "다음", "계속"이라고 하면 `/next`와 같이 행동한다.
+- 매 응답은 [질문] / [제안] / [승인 요청] / [요청] 중 하나 이상으로 끝낸다.
+- 게이트(단계 전환, PRD 범위 확정, ADR 채택, 구현 계획 승인, 릴리즈·push)는 사람 승인 없이 넘지 않는다.
+- 단계·작업이 바뀌거나 결정·가정이 생기면 그 즉시 STATUS.md를 갱신한다. 세션 마무리 땐 `/wrap`을 제안한다.
+- 작업 단위가 바뀌면 `/clear`를 권한다. STATUS.md와 계획 문서가 다음 세션의 기억이다.
+- 커스텀 명령: `/kickoff`, `/next`, `/plan`, `/adr`, `/review`, `/wrap`

@@ -2,8 +2,9 @@
 
 | 폴더/파일 | 내용 |
 |---|---|
-| [PROCESS.md](PROCESS.md) | 프로젝트 진행 절차 매뉴얼 |
-| [product/](product/) | PRD 등 제품 요구사항 |
+| [PROCESS.md](PROCESS.md) | 프로젝트 진행 절차 매뉴얼 (역할 분담, 단계, 협업 규칙) |
+| [STATUS.md](STATUS.md) | 현재 단계, 다음 할 일, 결정·가정, 세션 로그 |
+| [product/](product/) | 아이디어 브리프, PRD 등 제품 요구사항 |
 | [architecture/](architecture/) | 아키텍처 개요, 기능별 설계 문서 |
 | [adr/](adr/) | 아키텍처 결정 기록 (Architecture Decision Records) |
 | [plans/](plans/) | 이슈 단위 구현 계획 및 진행 기록 |
