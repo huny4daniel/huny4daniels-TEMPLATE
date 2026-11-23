@@ -1,0 +1,47 @@
+# OS / 에디터
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+*.swp
+
+# 비밀 값
+.env
+.env.*
+!.env.example
+*.keystore
+*.jks
+*.pem
+.claude/settings.local.json
+CLAUDE.local.md
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+build/
+dist/
+*.egg-info/
+*.spec.bak
+
+# Node
+node_modules/
+.turbo/
+.next/
+coverage/
+*.log
+
+# Android / Gradle
+.gradle/
+local.properties
+**/build/
+captures/
+
+# 설치 파일 출력
+installer/Output/
