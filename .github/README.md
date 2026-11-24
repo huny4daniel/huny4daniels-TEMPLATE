@@ -139,7 +139,7 @@ gh repo create <이름> --private --template huny4daniel/huny4daniels-TEMPLATE -
 ## 템플릿 관리
 
 - 파일 소유 구분(템플릿 소유 / 프로젝트 소유 / 템플릿 전용)과 업데이트 절차: [.claude/process/template-update.md](../.claude/process/template-update.md)
-- 템플릿 전용 파일(새 프로젝트로 복사하지 않음): `.github/README.md`, `.github/ROADMAP.md`, `.github/hook-tests/`, `.github/workflows/template-ci.yml`, `tools/scripts/new-project.ps1`
-- 도입 명령은 별도 저장소 [huny4daniels-claude-plugin](https://github.com/huny4daniel/huny4daniels-claude-plugin)에 있다. 템플릿 전용 파일 목록을 바꾸면 플러그인의 `adopt.md`와 `new-project.ps1`도 함께 고친다 (전체 목록: [ROADMAP.md](ROADMAP.md) "변경 시 함께 고칠 곳").
+- 템플릿 전용 파일(새 프로젝트로 복사하지 않음)의 목록은 루트의 [`.template-only`](../.template-only) 하나에만 있다. 생성 스크립트·플러그인 `/adopt`·초기화·업데이트 절차가 모두 이 파일을 읽고, 템플릿 CI가 목록의 경로가 실제로 있는지와 다른 곳에 목록이 따로 적혀 있지 않은지 검사한다.
+- 도입 명령은 별도 저장소 [huny4daniels-claude-plugin](https://github.com/huny4daniel/huny4daniels-claude-plugin)에 있다. 템플릿과 플러그인을 함께 바꿀 때는 **템플릿을 먼저 병합하고 플러그인을 나중에** 병합한다(플러그인이 아직 없는 템플릿 파일을 가리키는 순간이 생기지 않게).
 - 훅을 고치는 커밋에는 `.github/hook-tests/`의 케이스 추가를 함께 넣는다. 로컬 실행: `bats .github/hook-tests` ([bats-core](https://github.com/bats-core/bats-core) 1.11).
 - 개선 계획: [ROADMAP.md](ROADMAP.md)

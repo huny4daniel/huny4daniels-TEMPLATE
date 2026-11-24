@@ -36,6 +36,17 @@ jobs:
         if: runner.os == 'Linux'
         run: shellcheck -x -S warning .claude/hooks/*.sh .githooks/* .github/hook-tests/fake-bin/gh
 
+      - name: 생성 스크립트가 템플릿 전용 경로를 빼고 복사하는지
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $out = Join-Path $env:RUNNER_TEMP 'np'
+          powershell -NoProfile -File tools/scripts/new-project.ps1 -Name P -Path $out | Out-Null
+          $p = Join-Path $out 'P'
+          $bad = Get-Content .template-only | Where-Object { $_ -and -not $_.StartsWith('#') } | Where-Object { Test-Path (Join-Path $p $_.TrimEnd('/')) }
+          if ($bad) { Write-Error "복사되면 안 되는 경로: $bad"; exit 1 }
+          foreach ($need in 'docs/SPEC.md', '.claude/process/PROCESS.md', '.githooks/pre-push') { if (-not (Test-Path (Join-Path $p $need))) { Write-Error "빠진 경로: $need"; exit 1 } }
+
       - name: bats 설치
         run: git clone --quiet --depth 1 --branch v1.11.1 https://github.com/bats-core/bats-core.git "$RUNNER_TEMP/bats-core"
 

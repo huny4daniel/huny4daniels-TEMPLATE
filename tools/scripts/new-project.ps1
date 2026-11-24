@@ -15,11 +15,15 @@ $target = Join-Path $Path $Name
 
 if (Test-Path $target) { throw "이미 존재하는 경로: $target" }
 
-# .git, 템플릿 전용 파일(이 스크립트, 템플릿 소개·로드맵, 훅 테스트·템플릿 CI), 훅 캐시 파일은 복사하지 않는다
+# .git, 템플릿 전용 경로(.template-only — 목록의 유일한 원본), 훅 캐시·실행 기록은 복사하지 않는다
+$listFile = Join-Path $template '.template-only'
+if (-not (Test-Path $listFile)) { throw "템플릿 전용 목록이 없습니다: $listFile" }
+$entries = Get-Content $listFile -Encoding UTF8 | ForEach-Object { $_.Trim() } | Where-Object { $_ -and -not $_.StartsWith('#') }
 # @( )로 감싸 원소가 하나여도 배열로 유지한다 (문자열이면 @splat이 한 글자씩 넘김)
-$templateOnly = @(@('.github\README.md', '.github\ROADMAP.md', '.github\workflows\template-ci.yml') | ForEach-Object { Join-Path $template $_ })
-$templateOnlyDirs = @(@('.github\hook-tests') | ForEach-Object { Join-Path $template $_ })
-robocopy $template $target /E /XD .git @templateOnlyDirs /XF new-project.ps1 .last-pass .last-fail .template-check .template-version @templateOnly /NFL /NDL /NJH /NJS | Out-Null
+$templateOnlyDirs  = @($entries | Where-Object { $_.EndsWith('/') } | ForEach-Object { Join-Path $template $_.TrimEnd('/').Replace('/', '\') })
+$templateOnlyFiles = @($entries | Where-Object { -not $_.EndsWith('/') } | ForEach-Object { Join-Path $template $_.Replace('/', '\') })
+$runtimeDirs = @(Join-Path $template '.claude\metrics')
+robocopy $template $target /E /XD .git @templateOnlyDirs @runtimeDirs /XF .last-pass .last-fail .template-check .template-version @templateOnlyFiles /NFL /NDL /NJH /NJS | Out-Null
 if ($LASTEXITCODE -ge 8) { throw "복사 실패 (robocopy $LASTEXITCODE)" }
 
 # 적용한 템플릿 버전 기록 (.claude/process/template-update.md)
