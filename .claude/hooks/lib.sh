@@ -35,3 +35,22 @@ to_posix_path() {
     printf '%s' "$p"
   fi
 }
+
+# log_event <훅> <결과> [분류] [소요ms]: 훅 판정을 .claude/metrics/events.jsonl에 한 줄 남긴다 (ROADMAP C1).
+#   명령 원문·파일 내용은 남기지 않는다(비밀 값이 섞일 수 있음) — 분류 이름만.
+#   기록 실패는 조용히 넘어간다(판정에 영향 없음). 날짜·세션 ID는 bash 내장으로 얻어 프로세스를 만들지 않는다.
+#   HOOK_EVENT_LOG=0이면 기록하지 않는다.
+log_event() {
+  [[ ${HOOK_EVENT_LOG:-1} == 0 ]] && return 0
+  local dir="${CLAUDE_PROJECT_DIR:-.}/.claude/metrics" ts sid='' c=${3:-} re='"session_id"[[:space:]]*:[[:space:]]*"([^"\]*)"'
+  [[ -d $dir ]] || mkdir -p "$dir" 2>/dev/null || return 0
+  printf -v ts '%(%Y-%m-%dT%H:%M:%S%z)T' -1
+  [[ $input =~ $re ]] && sid=${BASH_REMATCH[1]}
+  c=${c//\"/}; c=${c//\/}
+  {
+    printf '{"ts":"%s","session":"%s","hook":"%s","result":"%s"' "$ts" "$sid" "$1" "$2"
+    [[ -n $c ]] && printf ',"cat":"%s"' "$c"
+    [[ -n ${4:-} ]] && printf ',"ms":%s' "$4"
+    printf '}\n'
+  } >> "$dir/events.jsonl" 2>/dev/null || true
+}

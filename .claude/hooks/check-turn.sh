@@ -11,6 +11,7 @@
 
 # shellcheck disable=SC2034  # $input은 lib.sh의 json_bool이 읽는다
 IFS= read -r -d '' input || true
+t0=$EPOCHREALTIME
 lib="${BASH_SOURCE[0]%/*}"; [[ $lib == "${BASH_SOURCE[0]}" ]] && lib=.
 # shellcheck source=lib.sh
 . "$lib/lib.sh" 2>/dev/null || exit 0
@@ -42,8 +43,10 @@ json_escape() {
     | awk 'BEGIN{ORS="\\n"} {print}'
 }
 
-report=""
+report="" kinds=""
+elapsed_ms() { local now=$EPOCHREALTIME; printf -v REPLY '%s' $(( (${now//[.,]/} - ${t0//[.,]/}) / 1000 )); }
 add_failure() {
+  kinds="${kinds:+$kinds,}$1"
   report="${report}[$1 실패] $2
 $(printf '%s\n' "$3" | tail -n 30)
 "
@@ -70,12 +73,14 @@ if [ -n "$SPEC_TEST_GLOB" ] && [ -f "$lib/spec-coverage.sh" ]; then
 fi
 
 if [ -z "$report" ]; then
+  elapsed_ms; log_event check-turn pass "" "$REPLY"
   printf '%s' "$state" > "$pass_file"
   rm -f "$fail_file"
   exit 0
 fi
 
 warn() {
+  elapsed_ms; log_event check-turn warn "$kinds" "$REPLY"
   printf '{"systemMessage":"%s"}\n' "$(printf '자동 검사 실패가 남아 있습니다 (.claude/hooks/checks.env).\n%s' "$report" | json_escape)"
   exit 0
 }
@@ -85,5 +90,6 @@ warn() {
 json_bool stop_hook_active && { printf '%s' "$state" > "$fail_file"; warn; }
 
 printf '%s' "$state" > "$fail_file"
+elapsed_ms; log_event check-turn block "$kinds" "$REPLY"
 printf '{"decision":"block","reason":"%s"}\n' "$(printf '자동 검사(.claude/hooks/checks.env)가 실패했습니다. 원인을 고치고 다시 확인하세요. 의도한 실패(예: 사람 승인을 기다리는 중)거나 고칠 수 없으면 그 이유를 설명하고 [질문]으로 끝내세요 — 같은 실패로 다시 막지 않습니다.\n%s' "$report" | json_escape)"
 exit 0

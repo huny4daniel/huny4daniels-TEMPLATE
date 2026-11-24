@@ -2,6 +2,8 @@
 # bats에서 `load helpers`로 불러온다. bats 전용 기능(run, $output 등)은 쓰지 않는다.
 
 HOOKS="$BATS_TEST_DIRNAME/../../.claude/hooks"
+# 이벤트 로그(C1)는 기본으로 끈다 — 테스트가 작업 폴더에 로그를 남기지 않게. event-log.bats만 켠다.
+export HOOK_EVENT_LOG=0
 
 # json_str <문자열>: JSON 문자열 리터럴로 인코딩 (python·jq 없이)
 json_str() {

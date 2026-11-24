@@ -22,12 +22,17 @@ lib="${BASH_SOURCE[0]%/*}"; [[ $lib == "${BASH_SOURCE[0]}" ]] && lib=.
 cmd="$(json_field command)" || exit 0
 [[ -n $cmd ]] || exit 0
 
+# 판정 이유의 [분류]를 이벤트 로그에 남긴다 (명령 원문은 남기지 않음)
+reason_cat() { local c=${1#\[}; printf -v REPLY '%s' "${c%%\]*}"; }
+
 ask() {
+  reason_cat "$1"; log_event guard ask "$REPLY"
   printf '{"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"ask","permissionDecisionReason":"%s"}}\n' "$1"
   exit 0
 }
 
 deny() {
+  reason_cat "$1"; log_event guard deny "$REPLY"
   printf '{"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"deny","permissionDecisionReason":"%s"}}\n' "$1"
   exit 0
 }

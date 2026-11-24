@@ -38,6 +38,7 @@ if [ -n "$LINT_CMD" ]; then
       printf '%s\n' "$out" | tail -n 40
       echo "위 오류를 고치세요. (설정: .claude/hooks/checks.env)"
     } >&2
+    log_event check-file lint-fail
     exit 2
   fi
 fi

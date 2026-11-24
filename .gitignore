@@ -15,6 +15,7 @@ desktop.ini
 .claude/settings.local.json
 CLAUDE.local.md
 .claude/hooks/.last-pass
+.claude/metrics/
 .claude/hooks/.last-fail
 .claude/.template-check
 

@@ -45,7 +45,7 @@
 │   └── architecture/ adr/ plans/ runbooks/ postmortems/ retros/
 ├── .claude/
 │   ├── commands/          /kickoff /next /plan /adr /review /fix /wrap
-│   ├── hooks/             guard.sh · check-file.sh · check-turn.sh · spec-coverage.sh · lib.sh · checks.env
+│   ├── hooks/             guard.sh · check-file.sh · check-turn.sh · spec-coverage.sh · metrics.sh · lib.sh · checks.env
 │   └── settings.json      훅 등록, 파일 도구의 비밀 파일 읽기 금지
 └── .github/               CI 뼈대, 이슈·PR 템플릿
     ├── hook-tests/        훅 회귀 테스트 (템플릿 전용)
@@ -98,6 +98,8 @@
 | PR | CI | 설치·린트·타입 체크·테스트·빌드 |
 
 검사 명령은 `.claude/hooks/checks.env` 한 곳에서 정하고, `AGENTS.md` 명령 표·CI와 같게 유지한다. 템플릿 상태에서는 비어 있어 꺼져 있다. 훅 공용 함수(JSON 필드 추출, 경로 변환)는 `.claude/hooks/lib.sh`에 있다.
+
+**효과도 기록한다**: 훅이 판정할 때마다 분류와 시간만 `.claude/metrics/events.jsonl`(로컬)에 남기고, `metrics.sh`가 확인 창 횟수, 차단 뒤 스스로 고친 비율, spec 커버리지 차단 횟수, 검사 시간을 요약한다. `/wrap`이 세션 로그에 한 줄로 옮긴다.
 
 **안전장치 자체도 검증한다**: `.github/hook-tests/`(bats)에 판정 픽스처 표와 훅별 회귀 테스트가 있고, 템플릿 CI(`template-ci.yml`)가 ubuntu·Windows에서 shellcheck·줄바꿈 검사와 함께 매 push마다 돌린다. 모든 셸 명령마다 실행되는 `guard.sh`는 성능 기준(케이스당 평균 시간)도 테스트한다.
 
