@@ -4,7 +4,7 @@
 |---|---|
 | 작성자 | |
 | 상태 | Draft / Review / Approved / Implemented |
-| 관련 PRD | [PRD](../product/PRD.md) |
+| 관련 spec | [SPEC](../SPEC.md) F-xx |
 | 최종 수정 | YYYY-MM-DD |
 
 ## 1. 개요

@@ -33,7 +33,7 @@
 
 - 진행 절차: [docs/PROCESS.md](docs/PROCESS.md)
 - 현재 상태: [docs/STATUS.md](docs/STATUS.md)
-- 제품 요구사항: [docs/product/PRD.md](docs/product/PRD.md)
+- spec (무엇을 만드는가): [docs/SPEC.md](docs/SPEC.md)
 - 아키텍처: [docs/architecture/overview.md](docs/architecture/overview.md)
 - 결정 기록: [docs/adr/](docs/adr/)
 - 변경 이력: [CHANGELOG.md](CHANGELOG.md)

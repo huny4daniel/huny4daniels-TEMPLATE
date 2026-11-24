@@ -307,7 +307,7 @@ Spec Kit은 spec → 구현에 집중하고, spec과 코드의 대조(analyze·c
 
 ### D3. 컨텍스트 예산
 
-- [ ] 완료
+- [x] 완료 — feature/g2-spec-doc PR (G2와 함께). 상한: 합계 16KB, 파일별 CLAUDE 1KB·AGENTS 5KB·PROCESS 10KB·STATUS 2.5KB. 검사 `.github/hook-tests/context-budget.bats`, 배출구 규칙은 guardrails.md "컨텍스트 예산"과 /wrap. 구현 시점 합계 약 15KB(PROCESS.md에 판단의 경계 표가 들어가며 늘었음)
 
 **문제**: 세션마다 자동 로드되는 CLAUDE.md + AGENTS.md + PROCESS.md + STATUS.md가 현재 약 12KB다. 프로젝트가 진행되면 AGENTS.md(Gotchas·제약)와 STATUS.md(결정·가정 표)가 계속 자란다.
 
@@ -397,7 +397,7 @@ Spec Kit은 spec → 구현에 집중하고, spec과 코드의 대조(analyze·c
 
 ### G2. spec 문서 재구성: 기능별 소절과 Given-When-Then 시나리오
 
-- [ ] 완료 (2026-11-24 재설계 — 처음 설계는 시나리오를 계획 문서에 두었으나, 계획 문서는 작업이 끝나면 보관되는 일회용 문서라 G1과 충돌했다)
+- [x] 완료 — feature/g2-spec-doc PR (2026-11-24 재설계 — 처음 설계는 시나리오를 계획 문서에 두었으나, 계획 문서는 작업이 끝나면 보관되는 일회용 문서라 G1과 충돌했다). 계획과 다른 점: `docs/templates/spec.md`를 따로 두지 않고 `docs/SPEC.md` 자체를 뼈대로 둔다(템플릿 복사본과 실제 파일이 이중으로 존재하지 않게). 1단계 문서 이름을 `01-idea-spec.md`로 바꿨다. `docs/product/` 폴더를 없애고 브리프는 full에서만 `docs/idea-brief.md`
 
 **문제**:
 - spec에서 기능 하나가 표 한 줄이고 수용 기준은 자유 형식 한 칸이다. 정상·실패·경계 동작을 담을 자리가 없다.

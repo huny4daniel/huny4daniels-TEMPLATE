@@ -3,6 +3,7 @@
 관행: KPT 회고, Runbook, Blameless Postmortem
 
 - **회고**: 마일스톤이 끝나면 Claude가 KPT(Keep / Problem / Try) 질문을 던지고 `docs/retros/`에 기록한다(템플릿 `docs/templates/retrospective.md`). Try 항목은 AGENTS.md, 절차 문서, 템플릿에 반영을 제안한다.
+  - **spec 돌아보기**: SPEC.md 변경 이력에서 이번 마일스톤에 자주 바뀐 기능과 그 이유를 짚는다(처음에 무엇을 몰랐는가). 남아 있는 `[제안]`·`[미정]`과 백로그를 정리할지 [질문]한다.
 - **Runbook**: 배포·롤백·자주 생기는 문제 대응을 `docs/runbooks/`에 둔다(템플릿 `runbook.md`).
 - **Postmortem**: 사용자 영향이 있던 문제는 비난 없는(Blameless) 형식으로 기록한다(템플릿 `postmortem.md`).
 
@@ -10,7 +11,7 @@
 
 Claude가 [제안]하고 사람이 고른다:
 
-- 다음 마일스톤이 있으면 → [03-plan.md](03-plan.md) (새로운 큰 기능이면 [01-idea-prd.md](01-idea-prd.md) PRD 갱신부터)
+- 다음 마일스톤이 있으면 → [03-plan.md](03-plan.md) (새로운 큰 기능이면 [01-idea-spec.md](01-idea-spec.md)대로 SPEC.md에 기능 소절을 먼저 추가)
 - 계획된 기능이 없고 버그·소소한 개선이 중심이면 → [maintenance.md](maintenance.md) (STATUS.md 모드를 "유지보수"로)
 - 더 진행하지 않기로 하면 → 아래 "프로젝트 종료"
 
