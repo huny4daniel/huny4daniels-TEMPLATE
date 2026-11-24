@@ -9,7 +9,7 @@
 
 ## 결정 (Decision)
 
-Michael Nygard가 제안한 ADR 형식으로 되돌리기 비싼 결정을 `docs/adr/NNNN-<제목>.md`에 기록한다. 템플릿은 `docs/templates/adr.md`를 쓴다.
+Michael Nygard가 제안한 ADR 형식으로 되돌리기 비싼 결정을 `docs/adr/NNNN-<제목>.md`에 기록한다. 템플릿은 `.claude/templates/adr.md`를 쓴다.
 
 ## 결과 (Consequences)
 

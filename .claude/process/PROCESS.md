@@ -4,7 +4,7 @@
 
 사람의 판단은 `docs/SPEC.md`(spec)에 기록된다. Claude는 spec을 따라 계획·구현·검증하고, 훅·게이트·기록 같은 운영 장치는 그 흐름이 지켜지게 한다. 절차는 업계 관행(Lean Canvas, ADR, Walking Skeleton, TDD, GitHub Flow, SemVer 등)을 엮은 것이다.
 
-이 문서는 세션마다 자동으로 로드되는 **핵심 규칙과 목차**다. 단계별 상세 절차는 `docs/process/`에 있고, 필요할 때만 읽는다.
+이 문서는 세션마다 자동으로 로드되는 **핵심 규칙과 목차**다. 단계별 상세 절차는 `.claude/process/`에 있고, 필요할 때만 읽는다.
 
 ## 역할
 
@@ -24,7 +24,7 @@
 | 사용자 영향 없는 내부 구현(구조, 이름, 알고리즘) | Claude | 진행한다. 구조 영향이 크면 ADR |
 
 3. **질문은** 한 번에 1~4개, 중요한 것부터, 선택지와 추천안을 함께. 문서에 이미 답이 있으면 묻지 않는다. **묻는 때**는 그 판단이 필요해지는 때다 — 처음에 전부 묻지 않고, `[미정]`이 남은 기능을 착수하려 할 때 묻는다. "모르겠다/추천대로"면 추천안을 `[제안]`으로 남기고(spec 밖의 가정은 STATUS.md 가정 표) 진행하되, 조용히 `[확정]`으로 바꾸지 않는다.
-4. **게이트 — 사람 승인 없이 넘지 않는다**: 단계 전환, spec 승인(`[제안]` 확인 포함), ADR 채택, 구현 계획 승인, `main`에 반영되는 것(직접 커밋·push, PR 병합), 태그·릴리즈, 외부 공개, 삭제·되돌리기 어려운 작업. 그 외(읽기, 초안, `[확정]` spec과 승인된 계획 안의 구현, 테스트, 기록, 작업 브랜치의 커밋·push, PR 생성)는 묻지 않고 진행한다. 위험 명령 확인과 린트·테스트 자동 실행은 훅이 기계적으로 처리한다 ([process/guardrails.md](process/guardrails.md)).
+4. **게이트 — 사람 승인 없이 넘지 않는다**: 단계 전환, spec 승인(`[제안]` 확인 포함), ADR 채택, 구현 계획 승인, `main`에 반영되는 것(직접 커밋·push, PR 병합), 태그·릴리즈, 외부 공개, 삭제·되돌리기 어려운 작업. 그 외(읽기, 초안, `[확정]` spec과 승인된 계획 안의 구현, 테스트, 기록, 작업 브랜치의 커밋·push, PR 생성)는 묻지 않고 진행한다. 위험 명령 확인과 린트·테스트 자동 실행은 훅이 기계적으로 처리한다 ([guardrails.md](guardrails.md)).
 5. **기록한다** — spec이 유일한 원본이다. 다른 문서는 범위·동작을 다시 적지 않고 ID로 가리킨다.
 
 | 무엇을 | 어디에 | 언제 |
@@ -48,23 +48,23 @@
               |_____________ 유지보수 모드 (버그 분류 → 수정 → PATCH) ←_______|
 ```
 
-0~2단계는 처음 한 번, 3~7단계는 마일스톤마다 반복한다. 첫 릴리즈 뒤로는 개발 모드와 유지보수 모드를 오간다. 끝은 정하지 않는다. 모든 단계의 기준은 spec이다. 규모(lite / full)는 1단계에서 정한다 — lite는 문서와 승인 왕복만 적고 규칙은 같다([process/01-idea-spec.md](process/01-idea-spec.md) "규모").
+0~2단계는 처음 한 번, 3~7단계는 마일스톤마다 반복한다. 첫 릴리즈 뒤로는 개발 모드와 유지보수 모드를 오간다. 끝은 정하지 않는다. 모든 단계의 기준은 spec이다. 규모(lite / full)는 1단계에서 정한다 — lite는 문서와 승인 왕복만 적고 규칙은 같다([01-idea-spec.md](01-idea-spec.md) "규모").
 
 | 단계 | 상세 절차 | 게이트 (승인 조건) |
 |---|---|---|
-| 0 초기화 | [process/00-init.md](process/00-init.md) | 저장소 준비, STATUS 단계 1 |
-| 1 아이디어·spec | [process/01-idea-spec.md](process/01-idea-spec.md) | Must 기능마다 시나리오, `[제안]` 모두 확인, 비목표 명시, spec 승인 |
-| 2 설계 (스택·개발 환경·릴리즈 방식) | [process/02-design.md](process/02-design.md) | 기술 선택 ADR, 설계 문서 승인 |
-| 3 계획 (Walking Skeleton, 이슈 분해) | [process/03-plan.md](process/03-plan.md) | 마일스톤·이슈 승인 |
-| 4 구현 (이슈마다 반복) | [process/04-build.md](process/04-build.md) | 이슈별 계획 승인, 참조 시나리오마다 테스트, DoD |
-| 5 검증 | [process/05-verify.md](process/05-verify.md) | 마일스톤 DoD, spec 대조, 사람 확인 |
-| 6 릴리즈 | [process/06-release.md](process/06-release.md) | Must 기능 모두 Done, 버전·배포 승인 |
-| 7 운영·회고, 다음 방향, 종료 | [process/07-retro.md](process/07-retro.md) | 다음 방향 선택 |
-| 유지보수 모드 (버그 처리) | [process/maintenance.md](process/maintenance.md) | 우선순위 승인 |
-| Git 작업 흐름, main 보호 | [process/git-flow.md](process/git-flow.md) | 병합 승인 |
-| 안전장치·자동 검증 훅 | [process/guardrails.md](process/guardrails.md) | — |
-| 템플릿 업데이트 반영 | [process/template-update.md](process/template-update.md) | 업데이트 내용 승인 |
-| 기존 프로젝트 도입 | [process/adopt.md](process/adopt.md) | — |
+| 0 초기화 | [00-init.md](00-init.md) | 저장소 준비, STATUS 단계 1 |
+| 1 아이디어·spec | [01-idea-spec.md](01-idea-spec.md) | Must 기능마다 시나리오, `[제안]` 모두 확인, 비목표 명시, spec 승인 |
+| 2 설계 (스택·개발 환경·릴리즈 방식) | [02-design.md](02-design.md) | 기술 선택 ADR, 설계 문서 승인 |
+| 3 계획 (Walking Skeleton, 이슈 분해) | [03-plan.md](03-plan.md) | 마일스톤·이슈 승인 |
+| 4 구현 (이슈마다 반복) | [04-build.md](04-build.md) | 이슈별 계획 승인, 참조 시나리오마다 테스트, DoD |
+| 5 검증 | [05-verify.md](05-verify.md) | 마일스톤 DoD, spec 대조, 사람 확인 |
+| 6 릴리즈 | [06-release.md](06-release.md) | Must 기능 모두 Done, 버전·배포 승인 |
+| 7 운영·회고, 다음 방향, 종료 | [07-retro.md](07-retro.md) | 다음 방향 선택 |
+| 유지보수 모드 (버그 처리) | [maintenance.md](maintenance.md) | 우선순위 승인 |
+| Git 작업 흐름, main 보호 | [git-flow.md](git-flow.md) | 병합 승인 |
+| 안전장치·자동 검증 훅 | [guardrails.md](guardrails.md) | — |
+| 템플릿 업데이트 반영 | [template-update.md](template-update.md) | 업데이트 내용 승인 |
+| 기존 프로젝트 도입 | [adopt.md](adopt.md) | — |
 
 ## 명령어
 
@@ -77,7 +77,7 @@
 | `/review` | 변경 사항을 spec·DoD 기준으로 점검 |
 | `/fix <이슈 또는 증상>` | 버그 분류 후 수정 루프 |
 | `/wrap` | 세션 마무리: 상태·기록 갱신, 커밋 제안 |
-| `/adopt [템플릿 경로]` | 빈 폴더·기존 프로젝트에 이 구조 적용, 이미 적용된 프로젝트는 템플릿 업데이트 반영 (플러그인, [process/adopt.md](process/adopt.md), [process/template-update.md](process/template-update.md)) |
+| `/adopt [템플릿 경로]` | 빈 폴더·기존 프로젝트에 이 구조 적용, 이미 적용된 프로젝트는 템플릿 업데이트 반영 (플러그인, [adopt.md](adopt.md), [template-update.md](template-update.md)) |
 
 ## 문서 위치
 
@@ -91,4 +91,4 @@
 | 작업 계획 | `docs/plans/<이슈>-<이름>.md` | 완료 후 보관 |
 | Runbook | `docs/runbooks/<주제>.md` | 상시 갱신 |
 | Postmortem / 회고 | `docs/postmortems/`, `docs/retros/` (`YYYY-MM-DD-<제목>.md`) | 불변 |
-| 문서 템플릿 | `docs/templates/` | — |
+| 문서 템플릿 | `.claude/templates/` | — |

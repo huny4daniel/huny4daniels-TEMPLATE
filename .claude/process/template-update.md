@@ -20,7 +20,7 @@ scale=full   # 또는 lite (1단계에서 정함)
 
 | 구분 | 파일 | 업데이트 방식 |
 |---|---|---|
-| **템플릿 소유** — 절차·도구. 프로젝트에서 고치지 않는다 | `docs/PROCESS.md`, `docs/README.md`, `docs/process/*`, `docs/templates/*`, `.claude/commands/*`, `.claude/hooks/*.sh`, `.githooks/*`, `.github/ISSUE_TEMPLATE/*`, `.github/pull_request_template.md`, `.editorconfig` | 새 버전으로 교체 (추가·삭제 포함). 단, 기록된 버전 이후 프로젝트에서 직접 고친 파일이면 3-way 병합 |
+| **템플릿 소유** — 절차·도구. 프로젝트에서 고치지 않는다 | `docs/README.md`, `.claude/process/*`, `.claude/templates/*`, `.claude/commands/*`, `.claude/hooks/*.sh`, `.githooks/*`, `.github/ISSUE_TEMPLATE/*`, `.github/pull_request_template.md`, `.editorconfig` | 새 버전으로 교체 (추가·삭제 포함). 단, 기록된 버전 이후 프로젝트에서 직접 고친 파일이면 3-way 병합 |
 | **프로젝트 소유** — 프로젝트 내용을 채운 파일 | `AGENTS.md`, `CLAUDE.md`, `docs/STATUS.md`, `.claude/hooks/checks.env`, `.claude/settings.json`, `README.md`, `CONTRIBUTING.md`, `CHANGELOG.md`, `.github/workflows/*`, `.gitignore`, `.gitattributes`, `.env.example`, `docs/SPEC.md`, `docs/idea-brief.md`, `docs/architecture/*`, `docs/adr/*`, `docs/plans/*`, `docs/runbooks/*`, `docs/postmortems/*`, `docs/retros/*`, `apps/`, `packages/`, `tools/` | **덮어쓰지 않는다.** 템플릿 쪽에서 구조가 바뀐 경우(새 섹션, 새 설정 키, 새 훅, 새 import)만 프로젝트 내용을 유지한 채 추가하는 변경을 제안한다 |
 | 제외 | 템플릿 전용: `tools/scripts/new-project.ps1`, `.github/README.md`(템플릿 소개), `.github/ROADMAP.md`(템플릿 개선 계획), `.github/hook-tests/`(훅 회귀 테스트), `.github/workflows/template-ci.yml`(템플릿 CI) | 가져오지 않는다 |
 
@@ -41,7 +41,7 @@ scale=full   # 또는 lite (1단계에서 정함)
    - 다르다(프로젝트에서 고침) → `git merge-file`로 3-way 병합. 충돌이 나면 해당 부분을 보여주고 [질문]한다.
 4. 프로젝트 소유 파일은 템플릿 쪽 변경(`git diff <기준>..<최신> -- <파일>`)을 읽고, 구조 변경이 있으면 프로젝트 내용을 지키며 반영할 수정안을 만든다.
 5. 바뀌는 파일 목록, 변경 요약(템플릿 커밋 메시지 기준), 병합·충돌 항목, 프로젝트 소유 파일 수정안을 한 화면으로 보여주고 [승인 요청]한다.
-6. 승인되면 `docs/template-update-<최신 짧은 SHA>` 브랜치에서 적용 → `.template-version` 갱신 → 커밋 → PR (docs/process/git-flow.md). 훅이 바뀌었으면 셸 명령 하나로 훅 동작을 확인한다.
+6. 승인되면 `docs/template-update-<최신 짧은 SHA>` 브랜치에서 적용 → `.template-version` 갱신 → 커밋 → PR (.claude/process/git-flow.md). 훅이 바뀌었으면 셸 명령 하나로 훅 동작을 확인한다.
 7. STATUS.md 결정 기록에 "템플릿 업데이트 <기준>→<최신>"을 남긴다.
 
 기준 커밋을 알 수 없으면(`.template-version` 없음) 템플릿 소유 파일을 최신과 파일 단위로 비교해 다른 것을 모두 보여주고, 하나씩 교체 여부를 [질문]한다. 끝나면 `.template-version`을 만든다.

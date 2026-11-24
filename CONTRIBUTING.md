@@ -1,6 +1,6 @@
 # 기여 가이드
 
-작업 흐름 전체는 [docs/process/git-flow.md](docs/process/git-flow.md)(GitHub Flow)를 따른다.
+작업 흐름 전체는 [.claude/process/git-flow.md](.claude/process/git-flow.md)(GitHub Flow)를 따른다.
 
 ## 브랜치
 
@@ -29,4 +29,4 @@
 - 버전은 SemVer `vMAJOR.MINOR.PATCH` 태그로 관리하고, 태그는 `main`에서 붙인다.
 - 릴리즈 방식(빌드·배포 방법)은 프로젝트마다 2단계에서 정해 ADR로 기록한다: {{릴리즈 ADR 링크}}
 - 릴리즈 전 `CHANGELOG.md`의 `[Unreleased]`를 버전 섹션으로 옮긴다.
-- 절차 상세: [docs/process/06-release.md](docs/process/06-release.md)
+- 절차 상세: [.claude/process/06-release.md](.claude/process/06-release.md)

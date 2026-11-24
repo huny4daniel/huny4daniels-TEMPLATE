@@ -5,7 +5,7 @@ argument-hint: <이슈 번호 또는 증상 설명>
 
 대상: $ARGUMENTS
 
-docs/process/maintenance.md 절차와 docs/PROCESS.md 협업 규칙을 따른다.
+.claude/process/maintenance.md 절차와 .claude/process/PROCESS.md 협업 규칙을 따른다.
 
 1. **트리아지**
    - 이슈 번호면 `gh issue view`로 읽는다. 증상 설명이면 중복 이슈를 검색하고, 없으면 버그 보고 템플릿 형식으로 이슈 생성을 [제안]한다.
@@ -21,5 +21,5 @@ docs/process/maintenance.md 절차와 docs/PROCESS.md 협업 규칙을 따른다
    - 원인만 고친다. 관련 없는 변경을 섞지 않는다.
    - 새 테스트와 전체 테스트·린트·빌드를 실행한다. 사람이 봐야 하면 확인 방법을 [요청]한다.
 3. **기록**
-   - CHANGELOG `[Unreleased]`의 `Fixed`에 추가, 원인과 수정 요약을 이슈에 남기고 커밋한다. PR(`Closes #<이슈번호>`)을 만들고 CI 통과를 확인한 뒤 병합을 [승인 요청]한다 (docs/process/git-flow.md).
+   - CHANGELOG `[Unreleased]`의 `Fixed`에 추가, 원인과 수정 요약을 이슈에 남기고 커밋한다. PR(`Closes #<이슈번호>`)을 만들고 CI 통과를 확인한 뒤 병합을 [승인 요청]한다 (.claude/process/git-flow.md).
    - docs/STATUS.md 갱신. P0였으면 핫픽스 릴리즈와 Postmortem 작성을 [제안]한다. 아니면 쌓인 수정 수를 보고 PATCH 릴리즈 시점인지 판단해 [제안]한다.

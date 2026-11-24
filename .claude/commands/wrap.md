@@ -2,7 +2,7 @@
 description: 세션 마무리 — 진행 상태와 기록을 갱신하고 커밋 제안
 ---
 
-docs/PROCESS.md의 기록 규칙을 따른다.
+.claude/process/PROCESS.md의 기록 규칙을 따른다.
 
 1. 이번 세션에서 한 일을 `git diff`, `git status`, 대화 내용으로 정리한다.
 2. 진행 중인 docs/plans/ 문서가 있으면 체크박스와 진행 기록(완료 / 발견한 문제 / 다음 할 일)을 갱신한다.
@@ -12,7 +12,7 @@ docs/PROCESS.md의 기록 규칙을 따른다.
    - 이번 세션의 결정과 가정. 범위·동작이 바뀐 결정이 있으면 docs/SPEC.md에 반영됐는지 확인하고, 안 됐으면 먼저 반영한 뒤 결정 기록의 `spec 반영` 칸을 채운다. 이번 세션에 만든 이슈·PR에 요구사항 ID(F-ID 또는 chore)가 빠졌으면 채운다
    - 세션 로그에 한 줄 추가 (10개 초과분은 삭제). `bash .claude/hooks/metrics.sh`로 오늘의 훅 이벤트를 세어 숫자가 있으면 같은 줄 끝에 붙인다(예: "검사 차단 2·스스로 고침 2, 확인 창 3")
 4. 이번 세션에서 새로 생긴 `[제안]`·`[미정]`이 있으면 사람 대기 항목에 한 줄씩 올린다(다음 세션이 먼저 묻도록).
-5. 자동 로드 문서가 커졌으면 정리를 [제안]한다: STATUS.md 결정 기록이 15줄을 넘으면 오래된 것을 `docs/decisions-log.md`로, AGENTS.md Gotchas가 한 영역에 몰리면 그 폴더의 하위 AGENTS.md로 옮긴다(docs/process/guardrails.md "컨텍스트 예산").
+5. 자동 로드 문서가 커졌으면 정리를 [제안]한다: STATUS.md 결정 기록이 15줄을 넘으면 오래된 것을 `docs/decisions-log.md`로, AGENTS.md Gotchas가 한 영역에 몰리면 그 폴더의 하위 AGENTS.md로 옮긴다(.claude/process/guardrails.md "컨텍스트 예산").
 6. 이번 세션에서 같은 실수를 반복했거나 환경 함정을 발견했으면 AGENTS.md Gotchas에 추가한다.
 7. 사용자에게 보이는 변경이 있으면 CHANGELOG `[Unreleased]`를 갱신한다.
-8. 변경 요약을 보여주고 커밋한다. 작업 브랜치에 있으면 바로 커밋·push하고, `main`에 직접 커밋해야 하면(문서만 바뀐 경우, docs/process/git-flow.md) [승인 요청]한다. 다음 세션에서 이어갈 첫 행동을 한 줄로 알려준다.
+8. 변경 요약을 보여주고 커밋한다. 작업 브랜치에 있으면 바로 커밋·push하고, `main`에 직접 커밋해야 하면(문서만 바뀐 경우, .claude/process/git-flow.md) [승인 요청]한다. 다음 세션에서 이어갈 첫 행동을 한 줄로 알려준다.

@@ -2,8 +2,6 @@
 
 | 폴더/파일 | 내용 |
 |---|---|
-| [PROCESS.md](PROCESS.md) | 진행 절차 핵심 규칙과 목차 (세션마다 자동 로드) |
-| [process/](process/) | 단계별 상세 절차 (필요할 때만 읽음) |
 | [STATUS.md](STATUS.md) | 현재 단계, 다음 할 일, 결정·가정, 세션 로그 |
 | [SPEC.md](SPEC.md) | **spec — 무엇을 만드는가의 유일한 기준.** 기능별 시나리오, 사람의 판단 기록(`[확정]`/`[제안]`/`[미정]`) |
 | idea-brief.md | 1단계 인터뷰 메모 (full 규모만, 이후 갱신 안 함) |
@@ -13,6 +11,6 @@
 | [runbooks/](runbooks/) | 배포·롤백·장애 대응 절차 |
 | [postmortems/](postmortems/) | 장애 사후 분석 |
 | [retros/](retros/) | 마일스톤 회고 |
-| [templates/](templates/) | 위 문서들의 템플릿 |
+| (절차·템플릿) | 진행 절차와 문서 템플릿은 템플릿 장치라 [`.claude/process/`](../.claude/process/PROCESS.md)와 `.claude/templates/`에 있다. 사람이 읽을 필요는 없다 |
 
-새 문서는 `templates/`에서 복사해 해당 폴더에 만든다.
+새 문서는 `.claude/templates/`에서 복사해 해당 폴더에 만든다.

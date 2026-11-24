@@ -127,7 +127,7 @@ if has 'gh[[:space:]]+pr[[:space:]]+merge'; then
   rc=$?
   summary="${checks//[\"\\]/}"; summary="${summary//[$'\t\r\n']/ }"; summary="${summary:0:300}"
   case $rc in
-    0) ask "[main 반영] PR 병합입니다. CI 통과 확인됨. 병합 승인 여부를 확인하세요. (docs/process/git-flow.md)" ;;
+    0) ask "[main 반영] PR 병합입니다. CI 통과 확인됨. 병합 승인 여부를 확인하세요. (.claude/process/git-flow.md)" ;;
     8) deny "[CI 진행 중] 아직 CI가 끝나지 않아 병합할 수 없습니다. 'gh pr checks --watch'로 완료를 기다린 뒤 다시 시도하세요. ($summary)" ;;
   esac
   shopt -s nocasematch
@@ -141,7 +141,7 @@ if has 'gh[[:space:]]+pr[[:space:]]+merge'; then
   ask "[main 반영] PR 병합입니다. CI 상태를 확인하지 못했습니다 ($summary). CI 통과 여부를 직접 확인하세요."
 fi
 if has 'gh[[:space:]]+release[[:space:]]+(create|delete|edit|upload)'; then
-  ask "[릴리즈] GitHub 릴리즈 생성·수정·삭제입니다. (docs/process/06-release.md)"
+  ask "[릴리즈] GitHub 릴리즈 생성·수정·삭제입니다. (.claude/process/06-release.md)"
 fi
 if has 'git([[:space:]]+-[Cc][[:space:]]+[^[:space:]]+)*[[:space:]]+push'; then
   if has '(--force|--force-with-lease|[[:space:]]-f([[:space:]]|$))'; then
@@ -151,10 +151,10 @@ if has 'git([[:space:]]+-[Cc][[:space:]]+[^[:space:]]+)*[[:space:]]+push'; then
     ask "[삭제] 원격 브랜치·태그 삭제입니다."
   fi
   if has '(--tags|--follow-tags|refs/tags/|[[:space:]]v[0-9]+\.[0-9]+)'; then
-    ask "[릴리즈] 버전 태그 push입니다. 릴리즈 워크플로가 실행될 수 있습니다. (docs/process/06-release.md)"
+    ask "[릴리즈] 버전 태그 push입니다. 릴리즈 워크플로가 실행될 수 있습니다. (.claude/process/06-release.md)"
   fi
   if [[ -n $push_main ]]; then
-    ask "[main 반영] $push_main. 직접 반영이 허용된 변경(문서만 수정 등)인지 확인하세요. (docs/process/git-flow.md)"
+    ask "[main 반영] $push_main. 직접 반영이 허용된 변경(문서만 수정 등)인지 확인하세요. (.claude/process/git-flow.md)"
   fi
 fi
 

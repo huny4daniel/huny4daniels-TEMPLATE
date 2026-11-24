@@ -5,7 +5,7 @@ argument-hint: [아이디어 한 줄, 생략 가능]
 
 아이디어: $ARGUMENTS
 
-docs/PROCESS.md 협업 규칙과 docs/process/00-init.md, docs/process/01-idea-spec.md를 따른다. 아이디어와 판단은 사람의 몫이다 — Claude는 묻고, 초안을 쓰고, 정리한다.
+.claude/process/PROCESS.md 협업 규칙과 .claude/process/00-init.md, .claude/process/01-idea-spec.md를 따른다. 아이디어와 판단은 사람의 몫이다 — Claude는 묻고, 초안을 쓰고, 정리한다.
 
 1. **0단계 점검**
    - README.md, AGENTS.md, docs/STATUS.md를 읽는다.
@@ -14,8 +14,8 @@ docs/PROCESS.md 협업 규칙과 docs/process/00-init.md, docs/process/01-idea-s
    - docs/STATUS.md: 0단계 체크, 현재 단계를 1로, 처음 아이디어를 세션 로그에 기록.
 2. **1-1 아이디어 인터뷰 시작**
    - 아이디어가 비어 있으면 "어떤 걸 만들고 싶으세요? 한 줄이어도 됩니다"로 시작한다.
-   - 아이디어 설명(과 첨부 문서)에서 인터뷰 8개 항목을 먼저 추출한다. 설명에서 직접 읽히는 것만 채우고, 추측한 것은 `(가정)`으로 표시한다. 기록 위치는 규모를 정하기 전까지 docs/idea-brief.md(docs/templates/idea-brief.md 복사, 아이디어 원문 그대로)다 — lite로 정해지면 내용을 SPEC.md로 옮기고 브리프 파일은 지운다.
-   - 비어 있거나 모호한 항목만 docs/process/01-idea-spec.md 1-1의 인터뷰 순서대로, 한 번에 1~4개씩 선택지와 추천안을 곁들여 질문한다. 이미 답이 있는 항목은 다시 묻지 않는다.
+   - 아이디어 설명(과 첨부 문서)에서 인터뷰 8개 항목을 먼저 추출한다. 설명에서 직접 읽히는 것만 채우고, 추측한 것은 `(가정)`으로 표시한다. 기록 위치는 규모를 정하기 전까지 docs/idea-brief.md(.claude/templates/idea-brief.md 복사, 아이디어 원문 그대로)다 — lite로 정해지면 내용을 SPEC.md로 옮기고 브리프 파일은 지운다.
+   - 비어 있거나 모호한 항목만 .claude/process/01-idea-spec.md 1-1의 인터뷰 순서대로, 한 번에 1~4개씩 선택지와 추천안을 곁들여 질문한다. 이미 답이 있는 항목은 다시 묻지 않는다.
    - 빈 항목이 없으면 인터뷰를 생략하고, 요약과 가정 목록을 보여준다.
    - 아이디어가 "템플릿을 쓰지 말아야 할 때"(01-idea-spec.md "규모")에 해당해 보이면 그 사실을 알리고 템플릿 없이 진행할지 [질문]한다.
    - 인터뷰 끝에 규모(lite / full)를 판정 기준과 함께 추천해 [승인 요청]하고, 승인되면 1-2(spec 작성)로 넘어간다. 추천안으로 정한 것은 spec에서 `[제안]`이 된다.

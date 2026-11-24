@@ -109,7 +109,7 @@ Claude Code 훅은 Claude를 거친 작업에만 걸린다. 사람이 터미널�
 
 ## 컨텍스트 예산
 
-세션마다 자동 로드되는 문서(CLAUDE.md가 import하는 `AGENTS.md`, `docs/PROCESS.md`, `docs/STATUS.md`)는 매 세션의 컨텍스트를 차지한다. 커질수록 규칙이 묻히고 비용이 는다.
+세션마다 자동 로드되는 문서(CLAUDE.md가 import하는 `AGENTS.md`, `.claude/process/PROCESS.md`, `docs/STATUS.md`)는 매 세션의 컨텍스트를 차지한다. 커질수록 규칙이 묻히고 비용이 는다.
 
 - **spec(`docs/SPEC.md`)은 자동 로드하지 않는다.** 프로젝트마다 크기가 크게 다르다. `/next`·세션 브리핑은 기능 제목 줄과 `[미정]`·`[제안]` 표시만 읽고, `/plan`·`/review`는 해당 기능 소절만 읽는다.
 - **상한**: 템플릿 상태 기준 합계 16KB(CLAUDE.md 1KB, AGENTS.md 5KB, PROCESS.md 10KB, STATUS.md 2.5KB). 템플릿 CI가 검사한다. 규칙을 추가할 때 상한을 넘으면 상세는 단계 문서로 옮기고 PROCESS.md에는 한 줄과 링크만 둔다.

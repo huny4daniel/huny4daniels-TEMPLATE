@@ -4,7 +4,7 @@
 
 | 경로 | 판단 기준 | 문서 |
 |---|---|---|
-| 업데이트 | `.template-version` 있음, 또는 `docs/PROCESS.md`·`docs/STATUS.md`가 함께 있음 | [template-update.md](template-update.md) |
+| 업데이트 | `.template-version` 있음, 또는 `.claude/process/PROCESS.md`·`docs/STATUS.md`가 함께 있음 | [template-update.md](template-update.md) |
 | 새 프로젝트 | 소스 코드·커밋 없음 (README·LICENSE·.gitignore 정도만) | [00-init.md](00-init.md) → `/kickoff` |
 | 기존 프로젝트 도입 | 그 외 | 이 문서 |
 

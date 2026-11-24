@@ -2,7 +2,7 @@
 
 @AGENTS.md
 
-@docs/PROCESS.md
+@.claude/process/PROCESS.md
 
 @docs/STATUS.md
 

@@ -43,4 +43,4 @@ jobs:
       - name: spec 커버리지
         run: bash .claude/hooks/spec-coverage.sh
 
-# 릴리즈 빌드는 태그(v*) 트리거의 release.yml을 별도로 둔다 (방식은 2단계 ADR에서 정한다 — docs/process/02-design.md, 03-plan.md).
+# 릴리즈 빌드는 태그(v*) 트리거의 release.yml을 별도로 둔다 (방식은 2단계 ADR에서 정한다 — .claude/process/02-design.md, 03-plan.md).

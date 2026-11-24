@@ -22,7 +22,7 @@ Claude는 먼저 사람이 준 설명(프롬프트, 첨부 문서)에서 아래 
 
 사람이 답을 모르면 Claude가 2~3개 후보와 추천안을 제시하고, 고른 것은 `[제안]`으로 남긴다.
 
-**기록 위치**: full은 `docs/templates/idea-brief.md`를 `docs/idea-brief.md`로 복사해 인터뷰 메모로 쓴다(이후 갱신하지 않는 참고 문서). **lite일 때**: 브리프 파일을 만들지 않고 답을 바로 SPEC.md 1절(개요)과 2절 기능 목록에 쓴다.
+**기록 위치**: full은 `.claude/templates/idea-brief.md`를 `docs/idea-brief.md`로 복사해 인터뷰 메모로 쓴다(이후 갱신하지 않는 참고 문서). **lite일 때**: 브리프 파일을 만들지 않고 답을 바로 SPEC.md 1절(개요)과 2절 기능 목록에 쓴다.
 
 **규모 정하기**: 인터뷰 끝에 Claude가 규모(lite / full)를 추천하고 [승인 요청]한다. 결과는 SPEC.md 머리 표의 "규모"와 STATUS.md에 적는다. 아래 "규모: lite와 full"을 따른다.
 
@@ -50,7 +50,7 @@ Claude는 먼저 사람이 준 설명(프롬프트, 첨부 문서)에서 아래 
 
 **lite에서 두지 않는 파일** — 규모가 lite로 승인되면 `/kickoff`가 목록을 보여주고 [승인 요청]한 뒤 지운다. 나중에 필요하면(첫 장애, full 전환) 템플릿 저장소에서 가져온다.
 - `docs/idea-brief.md`(내용은 SPEC.md로 옮긴 뒤), `docs/architecture/`, `docs/runbooks/`, `docs/postmortems/`, `docs/retros/`
-- `docs/templates/`의 `design-doc.md`·`runbook.md`·`postmortem.md`·`retrospective.md`·`idea-brief.md`
+- `.claude/templates/`의 `design-doc.md`·`runbook.md`·`postmortem.md`·`retrospective.md`·`idea-brief.md`
 - `apps/`, `packages/`, `tools/`(모노레포 구조), `CONTRIBUTING.md`
 - 함께 고칠 것: AGENTS.md "저장소 구조"·"아키텍처 제약"을 단일 앱 기준으로, `docs/README.md` 표에서 지운 폴더 행, `.template-version`에 `scale=lite`
 

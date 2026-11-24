@@ -22,7 +22,7 @@ $templateOnlyDirs = @(@('.github\hook-tests') | ForEach-Object { Join-Path $temp
 robocopy $template $target /E /XD .git @templateOnlyDirs /XF new-project.ps1 .last-pass .last-fail .template-check .template-version @templateOnly /NFL /NDL /NJH /NJS | Out-Null
 if ($LASTEXITCODE -ge 8) { throw "복사 실패 (robocopy $LASTEXITCODE)" }
 
-# 적용한 템플릿 버전 기록 (docs/process/template-update.md)
+# 적용한 템플릿 버전 기록 (.claude/process/template-update.md)
 $sha = (git -C $template rev-parse HEAD).Trim()
 if (git -C $template status --porcelain) { Write-Warning "템플릿 폴더에 커밋되지 않은 변경이 있습니다. 기록되는 버전($sha)과 실제 복사된 내용이 다를 수 있습니다." }
 $ver = "repo=huny4daniel/huny4daniels-TEMPLATE`ncommit=$sha`ndate=$(Get-Date -Format yyyy-MM-dd)`n"

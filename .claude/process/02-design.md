@@ -34,7 +34,7 @@
    - **릴리즈 방식**은 프로젝트마다 다르므로 고정하지 않고 여기서 고른다. 예: GitHub Release에 설치 파일·APK 첨부 / 앱스토어·패키지 저장소 배포 / 서버 배포 / 수동 배포. 태그 트리거 여부, 빌드 도구, 결과물 형식, 이전 릴리즈 정리 방식을 함께 정해 ADR로 남긴다.
    - **개발 환경**은 항목마다 따로 묻지 않고, 정해진 스택의 표준 도구 **조합을 한 묶음으로** 추천한다: 런타임 버전과 고정 방법, 패키지·의존성 관리, 워크스페이스 도구, 린터·포매터, 타입 체크, 테스트 프레임워크. (예 — Python: 3.12, uv workspaces, ruff, mypy, pytest, `.python-version` / TypeScript: Node LTS, pnpm workspaces, Turborepo, ESLint, Prettier, tsc, Vitest, `.nvmrc`) 묶음 안에서도 장단점이 분명한 항목은 떼어 선택지로 묻는다. 사람은 전체 승인하거나 바꿀 것만 말한다. 결과는 ADR "개발 환경과 도구" 하나로 남긴다.
 2. 항목별로 대안 비교 → 사람 선택 → ADR 작성(`/adr`)을 반복한다.
-3. `docs/architecture/overview.md` 작성(템플릿 `docs/templates/design-doc.md`): 시스템 컨텍스트, 구성 요소(= apps/packages 분할), 데이터 모델, 주요 흐름. 다이어그램은 C4의 Context / Container 수준(Mermaid)이면 충분하다.
+3. `docs/architecture/overview.md` 작성(템플릿 `.claude/templates/design-doc.md`): 시스템 컨텍스트, 구성 요소(= apps/packages 분할), 데이터 모델, 주요 흐름. 다이어그램은 C4의 Context / Container 수준(Mermaid)이면 충분하다.
 4. 모노레포 분할 원칙
    - 배포 단위 = `apps/` 하나. 단일 앱 프로젝트도 같은 구조를 쓴다 (`apps/` 하나, `packages/` 비어 있음).
    - 두 곳 이상에서 쓰면 `packages/`로 승격. 처음부터 쪼개지 않는다 (YAGNI).

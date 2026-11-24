@@ -15,7 +15,7 @@ TEST_CMD='' SPEC_TEST_GLOB=''
 # 표준 입력: <local ref> <local sha> <remote ref> <remote sha>
 while read -r _ _ remote_ref _; do
   case $remote_ref in
-    refs/heads/main|refs/heads/master) echo "[pre-push] 알림: ${remote_ref#refs/heads/}에 직접 push합니다 (docs/process/git-flow.md)" >&2 ;;
+    refs/heads/main|refs/heads/master) echo "[pre-push] 알림: ${remote_ref#refs/heads/}에 직접 push합니다 (.claude/process/git-flow.md)" >&2 ;;
     refs/tags/*) echo "[pre-push] 알림: 태그 ${remote_ref#refs/tags/} push — 릴리즈 워크플로가 실행될 수 있습니다" >&2 ;;
   esac
 done

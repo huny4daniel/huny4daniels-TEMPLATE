@@ -23,5 +23,5 @@
 ## 반영할 곳
 
 - [ ] AGENTS.md Gotchas
-- [ ] docs/PROCESS.md, docs/process/
-- [ ] docs/templates/
+- [ ] .claude/process/PROCESS.md, .claude/process/
+- [ ] .claude/templates/

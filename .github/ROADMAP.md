@@ -67,7 +67,7 @@ Spec Kit은 spec → 구현에 집중하고, spec과 코드의 대조(analyze·c
 | 3 | spec 기반 개발 | [G1](#g1-spec이-계속-기준-문서로-남게) [G3](#g3-요구사항-id-추적-가볍게) | 완료 |
 | 4 | spec 기반 개발 + 무게 관리 | [G2](#g2-spec-문서-재구성-기능별-소절과-given-when-then-시나리오)+[D3](#d3-컨텍스트-예산) → [G5](#g5-시나리오-커버리지-검사-결정론적) → [D1](#d1-lite-모드) → [G4](#g4-spec과-코드-대조-converge-방식) → [G6](#g6-탐색spike-경로) | 완료 (2026-11-24) |
 | 5 | 측정 | [C1](#c1-훅-이벤트-로그) | 완료 — 이제 로그가 쌓인다 |
-| 6 | 사용성·확장 | [D2](#d2-응답-꼬리표-규칙-완화) [E1](#e1-git-훅으로-같은-검사-공유) | 완료 |
+| 6 | 사용성·확장 | [D2](#d2-응답-꼬리표-규칙-완화) [E1](#e1-git-훅으로-같은-검사-공유) [D4](#d4-템플릿-장치를-claude로-모으기) | 완료 |
 | 7 | 나중에 | [C2](#c2-프로젝트-단위-지표-리포트) [E2](#e2-템플릿-설계-결정-기록) [F1](#f1-공개-전환-체크리스트) | **남음.** C2는 C1 로그가 몇 주 쌓인 뒤(요약 `metrics.sh`는 이미 있음 — 남은 것은 CI 실패율·되돌림 비율 같은 git·GitHub 지표와 적용 전후 비교). E2는 본인이 직접 쓴다(초안을 받더라도 본인 말로). F1은 공개할 때 |
 
 진행 기록: G2+D3 → G5 → D1 → G4 → G6 → C1 → D2·E1 순서로 2026-11-24에 구현했다. 남은 것은 C2·E2·F1. G2는 파일 이름·위치를 바꾸므로, 템플릿을 적용한 프로젝트가 아직 없는 지금 하는 것이 가장 싸다. lite 모드(D1)를 쓰는 프로젝트에도 G 규칙은 그대로 적용된다 — 문서의 양만 다르다(각 G 항목의 "lite일 때").
@@ -291,7 +291,7 @@ Spec Kit은 spec → 구현에 집중하고, spec과 코드의 대조(analyze·c
    훅·DoD·main 보호·릴리즈 게이트는 lite에서도 그대로 둔다(결정론적 장치는 비용이 거의 없음). 같은 이유로 spec 갱신 규칙(G1)과 커버리지 검사(G5)도 줄이지 않는다 — 문서가 작을 뿐 "바뀌면 같은 커밋에서 고친다", "Done이면 테스트가 있다"는 그대로다.
    lite → full 전환 시: 옮길 문서가 없다. 같은 SPEC.md에 빠진 절(비기능·성공 지표)과 나머지 기능의 시나리오를 채운다. ID는 그대로 쓴다.
 4. 각 단계 문서에 "lite일 때" 한 줄 문단을 추가하는 방식으로 구현한다(별도 문서 세트를 만들지 않음 — 이중 관리 방지).
-5. **복사되는 파일 줄이기**: lite로 정해지면 프로젝트에 필요한 것만 남긴다 — SPEC.md, STATUS.md, PROCESS.md·단계 문서, AGENTS.md·CLAUDE.md, `.claude/`(명령·훅), CI, CHANGELOG. `docs/templates/`의 나머지(설계 문서·runbook·postmortem·회고 템플릿), 빈 `runbooks/`·`postmortems/`·`retros/`, CONTRIBUTING은 두지 않고 필요할 때 템플릿 저장소에서 가져온다(템플릿 업데이트 절차가 이미 가져오는 방법을 갖고 있다). 모노레포 구조(`apps/`·`packages/`)도 lite에서는 만들지 않는다. 정리는 `/kickoff`가 규모 승인 직후 목록을 보여주고 [승인 요청]한 뒤 한다. template-update.md는 "lite 프로젝트에서 지운 템플릿 소유 파일은 다시 추가하지 않는다"를 따른다(`.template-version`에 `scale=lite` 기록).
+5. **복사되는 파일 줄이기**: lite로 정해지면 프로젝트에 필요한 것만 남긴다 — SPEC.md, STATUS.md, PROCESS.md·단계 문서, AGENTS.md·CLAUDE.md, `.claude/`(명령·훅), CI, CHANGELOG. `.claude/templates/`의 나머지(설계 문서·runbook·postmortem·회고 템플릿), 빈 `runbooks/`·`postmortems/`·`retros/`, CONTRIBUTING은 두지 않고 필요할 때 템플릿 저장소에서 가져온다(템플릿 업데이트 절차가 이미 가져오는 방법을 갖고 있다). 모노레포 구조(`apps/`·`packages/`)도 lite에서는 만들지 않는다. 정리는 `/kickoff`가 규모 승인 직후 목록을 보여주고 [승인 요청]한 뒤 한다. template-update.md는 "lite 프로젝트에서 지운 템플릿 소유 파일은 다시 추가하지 않는다"를 따른다(`.template-version`에 `scale=lite` 기록).
 6. **템플릿을 쓰지 말아야 할 때**: README와 /adopt에 명시한다 — 한 번 쓰고 버릴 스크립트, 하루짜리 실험, 테스트할 로직이 없는 것. 이런 경우 /adopt는 적용 대신 그 사실을 알리고 [질문]한다.
 7. **lite에서는 브리프 파일을 만들지 않는다**: 1단계 인터뷰 결과를 바로 SPEC.md 개요·기능 소절에 쓴다. 인터뷰 순서(문제 → 사용자 → 대안 → …)는 01 단계 문서에 그대로 두고, 결과물만 SPEC.md로 간다.
 
@@ -317,6 +317,16 @@ Spec Kit은 spec → 구현에 집중하고, spec과 코드의 대조(analyze·c
    - STATUS.md 결정 기록이 일정 개수를 넘으면 오래된 것을 `docs/decisions-log.md`(자동 로드 안 함)로 옮긴다. 세션 로그 10개 제한과 같은 방식.
    - AGENTS.md Gotchas가 특정 영역에 몰리면 그 폴더의 하위 CLAUDE.md/AGENTS.md로 옮긴다(해당 폴더 작업 시에만 로드됨).
 3. `/context`로 실제 토큰 사용량을 가끔 확인해 이 문서에 기록한다.
+
+### D4. 템플릿 장치를 .claude/로 모으기
+
+- [x] 완료 — feature/hide-machinery PR (2026-11-24)
+
+**문제**: lite로 줄여도 프로젝트에 52개 파일이 남고, 그중 대부분이 사람이 읽지 않는 템플릿 장치(절차 문서 13개, 문서 템플릿, 명령, 훅)였다. 작은 도구 저장소를 열면 코드보다 절차가 먼저 보이고, 처음 보는 사람에게는 만든 것보다 절차가 눈에 띈다.
+
+**방법**: `docs/PROCESS.md`·`docs/process/` → `.claude/process/`, `docs/templates/` → `.claude/templates/`. 사람에게 보이는 것은 코드, README, `docs/`(SPEC·STATUS·ADR·계획)뿐이다. 저장소는 여전히 자기 완결적이라(다른 에이전트도 AGENTS.md → `.claude/process/PROCESS.md`로 읽음) 템플릿 업데이트 방식도 그대로다. 대안으로 검토한 "절차를 플러그인으로 옮기기"는 파일 수가 더 줄지만 플러그인 없는 환경·다른 에이전트에서 절차가 사라져 택하지 않았다.
+
+**함께 넣은 것**: /review가 자동화할 수 있는 로직의 `(수동)` 표시를 지적(커버리지 검사를 피하는 통로 차단), /next가 lite 판정 기준이 깨졌는지 매번 점검해 full 전환을 제안.
 
 ---
 
@@ -379,7 +389,7 @@ Spec Kit은 spec → 구현에 집중하고, spec과 코드의 대조(analyze·c
 
 **방법**:
 1. **규칙 한 줄**(PROCESS.md 협업 규칙 4 기록 표): "제품·범위가 바뀌면 **같은 커밋/PR에서 spec을 먼저 고친다**. STATUS.md 결정 기록에는 한 줄과 spec 링크만 둔다." STATUS.md 결정 기록 표에 `spec 반영` 열(✓ / 해당 없음)을 추가한다.
-2. **PRD 템플릿**(`docs/templates/prd.md`와 템플릿의 `docs/product/PRD.md` 자리표시자):
+2. **PRD 템플릿**(`.claude/templates/prd.md`와 템플릿의 `docs/product/PRD.md` 자리표시자):
    - `## 11. 백로그`: 아직 범위에 넣지 않은 요청. 형식 `- (날짜, 출처 #이슈) 요청 한 줄`. maintenance.md와 /fix가 가리키는 곳을 실제로 만든다.
    - `## 12. 변경 이력`: `| 날짜 | 변경 | 이유 | 관련 PR/이슈 |`. 요구사항 행은 지우지 않고 상태(`Dropped`, `Changed → F-07`)로 남긴다(ID 재사용 금지, G3).
    - 기능 요구사항 표에 `상태` 열: `Planned / In Progress / Done / Dropped`.
@@ -397,7 +407,7 @@ Spec Kit은 spec → 구현에 집중하고, spec과 코드의 대조(analyze·c
 
 ### G2. spec 문서 재구성: 기능별 소절과 Given-When-Then 시나리오
 
-- [x] 완료 — feature/g2-spec-doc PR (2026-11-24 재설계 — 처음 설계는 시나리오를 계획 문서에 두었으나, 계획 문서는 작업이 끝나면 보관되는 일회용 문서라 G1과 충돌했다). 계획과 다른 점: `docs/templates/spec.md`를 따로 두지 않고 `docs/SPEC.md` 자체를 뼈대로 둔다(템플릿 복사본과 실제 파일이 이중으로 존재하지 않게). 1단계 문서 이름을 `01-idea-spec.md`로 바꿨다. `docs/product/` 폴더를 없애고 브리프는 full에서만 `docs/idea-brief.md`
+- [x] 완료 — feature/g2-spec-doc PR (2026-11-24 재설계 — 처음 설계는 시나리오를 계획 문서에 두었으나, 계획 문서는 작업이 끝나면 보관되는 일회용 문서라 G1과 충돌했다). 계획과 다른 점: `.claude/templates/spec.md`를 따로 두지 않고 `docs/SPEC.md` 자체를 뼈대로 둔다(템플릿 복사본과 실제 파일이 이중으로 존재하지 않게). 1단계 문서 이름을 `01-idea-spec.md`로 바꿨다. `docs/product/` 폴더를 없애고 브리프는 full에서만 `docs/idea-brief.md`
 
 **문제**:
 - spec에서 기능 하나가 표 한 줄이고 수용 기준은 자유 형식 한 칸이다. 정상·실패·경계 동작을 담을 자리가 없다.
@@ -408,7 +418,7 @@ Spec Kit은 spec → 구현에 집중하고, spec과 코드의 대조(analyze·c
 **근거**: 본인 프로젝트의 실제 방식이 템플릿보다 앞서 있다. 프로젝트 A의 `docs/SPEC.md`는 기능별 소절 + 사용자 스토리 + 완료 조건(경계 상황 포함)이고, 프로젝트 B의 `SPEC.md`는 항목마다 `[확정]`/`[제안]`/`[미정]`을 표시한다. 새 형식을 발명하지 않고 이 방식을 표준으로 다듬는다.
 
 **방법**:
-1. **파일 이름·위치를 하나로**: `docs/product/PRD.md` → **`docs/SPEC.md`**, `docs/templates/prd.md` → `docs/templates/spec.md`. lite도 같은 파일을 쓴다(짧게). 아이디어 브리프는 1단계 인터뷰 결과(참고용)로 돌아가고, G1·G3에서 브리프에 넣은 "변경 이력"·"나중에"·F-ID 규칙은 SPEC.md로 옮긴다. 이렇게 하면 lite → full 전환 때 문서를 옮길 필요가 없고(같은 파일이 자랄 뿐), G5 스크립트도 한 파일만 읽는다.
+1. **파일 이름·위치를 하나로**: `docs/product/PRD.md` → **`docs/SPEC.md`**, `.claude/templates/prd.md` → `.claude/templates/spec.md`. lite도 같은 파일을 쓴다(짧게). 아이디어 브리프는 1단계 인터뷰 결과(참고용)로 돌아가고, G1·G3에서 브리프에 넣은 "변경 이력"·"나중에"·F-ID 규칙은 SPEC.md로 옮긴다. 이렇게 하면 lite → full 전환 때 문서를 옮길 필요가 없고(같은 파일이 자랄 뿐), G5 스크립트도 한 파일만 읽는다.
    - 경로를 참조하는 곳 전부 갱신: README, PROCESS.md 문서 위치 표, 01·03·04·05 단계 문서, maintenance.md, adopt.md(역방향 문서화), /plan·/review·/wrap·/fix·/kickoff, 이슈·PR 템플릿, STATUS.md, .github/README.md. `grep -rn "PRD\|idea-brief" docs .claude .github`로 누락을 확인한다.
    - 기존 프로젝트: 적용한 프로젝트가 아직 없으므로 이전 경로 호환은 두지 않는다. template-update.md에 "PRD.md가 있는 프로젝트는 SPEC.md로 이름을 바꾸는 수정안을 제안" 한 줄만 둔다.
 2. **SPEC.md 구조**:
@@ -444,7 +454,7 @@ Spec Kit은 spec → 구현에 집중하고, spec과 코드의 대조(analyze·c
    - 시나리오 표시: `[확정]`(합의됨) / `[제안]`(Claude 추천안, 사람 확인 전 — STATUS.md 가정 표의 역할을 spec 안에서 함) / `[미정]`(결정 필요). 그리고 자동화할 수 없는 시나리오는 `(수동)`.
    - 기존 "열린 질문" 절은 `[미정]` 표시로 흡수한다(위치가 기능 옆에 있어 더 잘 보인다).
    - 시나리오 작성 규칙: 정상 경로 하나 + 실패·경계 경로 최소 하나. Then에는 관찰 가능한 결과만(화면, 파일, 반환값, 로그). "잘 동작한다", "빠르다"는 숫자나 비교 대상으로 바꾼다. EARS는 도입하지 않는다(여러 사람이 해석하는 규모에서 효과가 크고, 1인 소형 프로젝트에서는 문장 다듬는 비용이 더 크다).
-3. **계획 문서·이슈는 참조만**: `docs/templates/plan.md`와 기능 요청 이슈 템플릿의 "수용 기준" 절을 **"이번에 구현할 시나리오: F-03.1, F-03.2"**로 바꾼다. 구현 중 시나리오가 바뀌면 계획이 아니라 SPEC.md를 고친다(G1 규칙). 계획 문서에는 구현 단계·검증 방법·진행 기록만 남는다.
+3. **계획 문서·이슈는 참조만**: `.claude/templates/plan.md`와 기능 요청 이슈 템플릿의 "수용 기준" 절을 **"이번에 구현할 시나리오: F-03.1, F-03.2"**로 바꾼다. 구현 중 시나리오가 바뀌면 계획이 아니라 SPEC.md를 고친다(G1 규칙). 계획 문서에는 구현 단계·검증 방법·진행 기록만 남는다.
 4. **게이트와 착수 조건**:
    - 1단계 게이트(spec 승인): Must 기능마다 시나리오가 있고, 모든 `[제안]`을 사람이 `[확정]`으로 바꾸거나 고쳤다.
    - Definition of Ready: 착수할 기능에 `[미정]` 시나리오가 없고, 실패·경계 시나리오가 하나 이상 있다. `[미정]`이 남아 있으면 Claude는 착수하지 않고 [질문]한다.
@@ -565,24 +575,24 @@ G1·G3는 구현됐다(아래 표에서 ✓). G2를 구현할 때 G1·G3가 고�
 
 | 파일 | G1 ✓ | G3 ✓ | G2 | G5 | G4 | G6 |
 |---|---|---|---|---|---|---|
-| `docs/templates/prd.md` → `spec.md`, `docs/product/PRD.md` → `docs/SPEC.md` | 백로그·변경 이력·상태 | NF 표·ID 규칙 | 이름 변경, 기능 소절·시나리오·표시 구조 | 상태 표기 형식 고정 | — | `[탐색]` 소절 예시 |
-| `docs/templates/idea-brief.md` | lite 절 | F-ID | lite 절·F-ID를 SPEC.md로 옮기고 참고용으로 되돌림 | — | — | — |
-| `docs/templates/plan.md`, 기능 요청 이슈 템플릿 | 완료 시 상태 갱신 | F-ID | 수용 기준 절 → 시나리오 ID 참조 | — | — | — |
+| `.claude/templates/prd.md` → `spec.md`, `docs/product/PRD.md` → `docs/SPEC.md` | 백로그·변경 이력·상태 | NF 표·ID 규칙 | 이름 변경, 기능 소절·시나리오·표시 구조 | 상태 표기 형식 고정 | — | `[탐색]` 소절 예시 |
+| `.claude/templates/idea-brief.md` | lite 절 | F-ID | lite 절·F-ID를 SPEC.md로 옮기고 참고용으로 되돌림 | — | — | — |
+| `.claude/templates/plan.md`, 기능 요청 이슈 템플릿 | 완료 시 상태 갱신 | F-ID | 수용 기준 절 → 시나리오 ID 참조 | — | — | — |
 | `.github/pull_request_template.md` | spec 갱신 체크 | 요구사항 칸 | 경로 | — | — | — |
-| `docs/PROCESS.md`, `docs/README.md` | 기록 표 | — | 문서 위치 표·흐름 설명의 경로 | — | — | 탐색 경로 한 줄 |
+| `.claude/process/PROCESS.md`, `docs/README.md` | 기록 표 | — | 문서 위치 표·흐름 설명의 경로 | — | — | 탐색 경로 한 줄 |
 | `docs/STATUS.md` | spec 반영 열 | — | 가정 표는 spec 밖의 가정만(제품·동작 가정은 SPEC.md `[제안]`) | — | — | — |
-| `docs/process/01-idea-prd.md` | spec 규칙 | — | SPEC.md 작성, `[제안]`→`[확정]` 게이트 | — | — | 탐색 표시 |
-| `docs/process/03-plan.md` | — | 이슈 F-ID | DoR(`[미정]` 없음, 실패 시나리오) | — | — | 탐색·본 구현 이슈 분리 |
-| `docs/process/04-build.md` | 환류 | 테스트 ID | 시나리오별 TDD, `(수동)` → 사람 확인 | — | — | — |
-| `docs/process/05-verify.md` | — | Must 확인 | — | — | 대조 절차·게이트 | — |
-| `docs/process/06-release.md` | — | — | — | 릴리즈 조건 | — | — |
-| `docs/process/maintenance.md`, `.claude/commands/fix.md` | 백로그 위치 | — | spec 위반 / spec 공백 분류 | — | — | — |
-| `docs/process/adopt.md`, `template-update.md` | — | — | 역방향 SPEC.md, 이름 변경 수정안 | 새 훅 파일 | — | — |
+| `.claude/process/01-idea-prd.md` | spec 규칙 | — | SPEC.md 작성, `[제안]`→`[확정]` 게이트 | — | — | 탐색 표시 |
+| `.claude/process/03-plan.md` | — | 이슈 F-ID | DoR(`[미정]` 없음, 실패 시나리오) | — | — | 탐색·본 구현 이슈 분리 |
+| `.claude/process/04-build.md` | 환류 | 테스트 ID | 시나리오별 TDD, `(수동)` → 사람 확인 | — | — | — |
+| `.claude/process/05-verify.md` | — | Must 확인 | — | — | 대조 절차·게이트 | — |
+| `.claude/process/06-release.md` | — | — | — | 릴리즈 조건 | — | — |
+| `.claude/process/maintenance.md`, `.claude/commands/fix.md` | 백로그 위치 | — | spec 위반 / spec 공백 분류 | — | — | — |
+| `.claude/process/adopt.md`, `template-update.md` | — | — | 역방향 SPEC.md, 이름 변경 수정안 | 새 훅 파일 | — | — |
 | `.claude/commands/review.md`, `wrap.md`, `plan.md`, `kickoff.md` | spec 갱신 확인 | ID 사슬 | 경로·시나리오 참조 | — | 변경 범위 대조 | — |
 | `.claude/hooks/spec-coverage.sh`, `check-turn.sh`, `checks.env` | — | — | — | 새 스크립트·연결·설정 | — | `[탐색]` 제외 |
 | `.github/workflows/ci.yml` (자리표시자) | — | — | — | 검사 스텝 | — | — |
 | `.github/hook-tests/` | — | — | — | 픽스처·테스트 | — | 제외 케이스 |
-| `docs/process/guardrails.md`, `.github/README.md` | — | — | 경로 | 장치 표·한계 | 대조 설명 | 탐색 설명 |
+| `.claude/process/guardrails.md`, `.github/README.md` | — | — | 경로 | 장치 표·한계 | 대조 설명 | 탐색 설명 |
 | 플러그인 `adopt.md` | — | — | PRD → SPEC.md | — | — | — |
 
 G와 D1(lite) 중 무엇을 먼저 구현하든, 단계 문서에 "lite일 때" 한 줄을 다는 D1의 방식을 따른다(별도 문서 세트 금지). G를 먼저 하면 각 항목의 "lite일 때"를 그대로 옮기고, D1을 먼저 하면 G 구현 때 lite 문단에 한 줄씩 덧붙인다.
@@ -608,8 +618,8 @@ G와 D1(lite) 중 무엇을 먼저 구현하든, 단계 문서에 "lite일 때" 
 
 템플릿 전용 파일을 추가·삭제하면 아래를 모두 고친다.
 
-- `docs/process/template-update.md` 파일 소유 구분의 "제외" 행
-- `docs/process/00-init.md`의 템플릿 전용 파일 삭제 안내
+- `.claude/process/template-update.md` 파일 소유 구분의 "제외" 행
+- `.claude/process/00-init.md`의 템플릿 전용 파일 삭제 안내
 - `tools/scripts/new-project.ps1`의 robocopy 제외 목록
 - 플러그인 저장소 `plugins/project-process/commands/adopt.md` 새 프로젝트 모드 복사 제외 목록 (+ `plugin.json` 버전)
 - `.github/README.md` 템플릿 관리 섹션
