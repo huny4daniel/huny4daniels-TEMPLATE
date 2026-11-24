@@ -17,10 +17,28 @@ AI의 판단에 맡기지 않고 **기계적으로** 동작하는 장치들. 지
 
 훅은 bash로 실행된다. 조정·끄기는 `/hooks` 메뉴 또는 `.claude/settings.json`.
 
-**Windows 주의**: Claude Code가 Git Bash(Git for Windows)를 찾아야 훅이 동작한다. 찾지 못하면 훅이 PowerShell로 실행되어 실패하고, 이때 모든 셸 명령이 막힌다 (오류 메시지에 "Git Bash wasn't found"). Git을 표준 위치가 아닌 곳에 설치했다면 사용자 설정(`~/.claude/settings.json`)에 경로를 지정한다:
+**Windows 주의**: Claude Code가 Git Bash(Git for Windows)를 찾아야 훅이 동작한다. Claude Code는 보통 PATH에 있는 git의 위치에서 Git Bash를 찾는다. 찾지 못하면 훅이 PowerShell로 실행되어 실패하고, 이때 모든 셸 명령이 막힌다(오류 메시지에 "Git Bash wasn't found"). Git이 표준 위치가 아니거나, Git Bash 안에서 Claude를 띄워 PATH 맨 앞의 git이 다른 곳(예: `ucrt64\bin\git.exe`)을 가리킬 때 생긴다.
+
+**해결 — 묻기 전에 찾는다**: 셸이 막혀도 PowerShell 도구는 쓸 수 있다. PATH의 git마다 상위 폴더로 올라가며 `bin\bash.exe`가 있는 곳을 찾는다.
+
+```powershell
+$found = $null
+foreach ($g in @(Get-Command git -All -ErrorAction SilentlyContinue | ForEach-Object { $_.Source })) {
+  $d = Split-Path $g
+  while ($d -and -not $found) {
+    if (Test-Path (Join-Path $d 'bin\bash.exe')) { $found = Join-Path $d 'bin\bash.exe' }
+    $p = Split-Path $d; if ($p -eq $d) { break }; $d = $p
+  }
+  if ($found) { break }
+}
+$found
+```
+
+- **찾으면** 현재 계정의 사용자 설정(`CLAUDE_CONFIG_DIR`가 있으면 그 폴더, 없으면 `~/.claude`)의 `settings.json`에 넣고, 넣은 값과 함께 Claude Code 재시작을 [요청]한다. 기존 설정은 지우지 않고 `env`에 키 하나만 더한다.
+- **못 찾으면** Git 설치 폴더를 [질문]하고, 그 폴더에 `bin\bash.exe`가 있는지 확인한 뒤 같은 방식으로 넣는다. 없으면 Git for Windows 설치를 [요청]한다.
 
 ```json
-{ "env": { "CLAUDE_CODE_GIT_BASH_PATH": "C:\\설치경로\\Git\\bin\\bash.exe" } }
+{ "env": { "CLAUDE_CODE_GIT_BASH_PATH": "C:\설치경로\Git\bin\bash.exe" } }
 ```
 
 ## 위험 작업 확인 (guard.sh)
