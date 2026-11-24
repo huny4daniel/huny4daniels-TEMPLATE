@@ -81,9 +81,9 @@
 | 판단의 경계 | 보이는 동작·범위·트레이드오프는 사람, 표준이 분명한 것과 내부 구현은 Claude ([PROCESS.md](../docs/PROCESS.md) 협업 규칙 2) |
 | spec은 계속 갱신 | 범위·동작이 바뀌면 **같은 커밋/PR에서 SPEC.md를 먼저** 고치고 변경 이력에 남긴다. 기능은 지우지 않고 상태(`Planned`→`Done`/`Dropped`)로, 범위 밖 요청은 백로그 절에. `/review`·`/wrap`·PR 체크리스트가 누락을 점검 |
 | ID 사슬 | `F-ID → 이슈 [F-01] → 계획 "구현할 시나리오" → 테스트 이름·주석(F-01.1) → PR`. 시나리오마다 실패하는 테스트부터(TDD). 버그는 spec 위반(회귀 테스트) / spec 공백(시나리오 먼저 추가)으로 나눈다 |
-| lite일 때 | 같은 SPEC.md를 짧게. 시나리오는 테스트를 쓸 기능에만, 계획은 `docs/plans/mvp.md` 체크리스트(기능 ID만) |
+| lite일 때 | 같은 SPEC.md를 짧게. 시나리오는 테스트를 쓸 기능에만, 계획은 `docs/plans/mvp.md` 체크리스트(기능 ID만). 커버리지 검사는 그대로 |
 | 기계적 강제 | `Done`이라고 적으려면 자동 시나리오마다 ID가 달린 테스트가 있어야 하고, `[제안]`·`[미정]`이 없어야 한다. Stop 훅·CI가 검사한다(`spec-coverage.sh`, 아래 안전장치 표) |
-| 이어질 장치 | G4 — 마일스톤 끝에 spec과 코드를 의미 수준에서 대조. G6 — 탐색 경로 운영. D1 — lite 모드 전체 ([ROADMAP](ROADMAP.md)) |
+| 이어질 장치 | G4 — 마일스톤 끝에 spec과 코드를 의미 수준에서 대조. G6 — 탐색 경로 운영 ([ROADMAP](ROADMAP.md)) |
 
 ## 안전장치
 
@@ -127,6 +127,8 @@ gh repo create <이름> --private --template huny4daniel/huny4daniels-TEMPLATE -
 ```
 
 이후 프로젝트 폴더에서 `/kickoff`, 이어서 할 때는 `/next`.
+
+**규모**: 1단계 인터뷰 끝에 lite / full을 정한다. lite(앱 하나, 사용자 본인·소수, 결제·개인정보 없음, MVP 한두 주)는 SPEC.md를 짧게 쓰고, 1·2단계 승인을 한 번에 받고, 이슈 대신 체크리스트로 진행하며, 쓰지 않는 문서·폴더(설계 문서, runbook, 모노레포 구조 등)를 두지 않는다. 규칙(spec이 기준, 판단은 사람, 훅·커버리지 검사)은 같다. 한 번 쓰고 버릴 스크립트나 하루짜리 실험에는 템플릿을 쓰지 않는다 — `/kickoff`가 그렇게 보이면 먼저 묻는다. 자세한 기준: [01-idea-spec.md](../docs/process/01-idea-spec.md) "규모".
 
 **Windows**: 훅은 Git Bash로 실행된다. 찾지 못하면 셸 명령이 모두 막히므로 [guardrails.md](../docs/process/guardrails.md)의 `CLAUDE_CODE_GIT_BASH_PATH` 설정을 먼저 확인한다.
 

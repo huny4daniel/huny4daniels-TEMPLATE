@@ -10,6 +10,7 @@
 repo=huny4daniel/huny4daniels-TEMPLATE
 commit=<적용한 템플릿 커밋 SHA>
 date=YYYY-MM-DD
+scale=full   # 또는 lite (1단계에서 정함)
 ```
 
 - 새 프로젝트 생성(`/adopt` 새 프로젝트 모드, `new-project.ps1`)과 기존 프로젝트 도입 때 자동으로 만든다. GitHub "Use this template"으로 만든 경우 0단계에서 만든다.
@@ -24,6 +25,8 @@ date=YYYY-MM-DD
 | 제외 | 템플릿 전용: `tools/scripts/new-project.ps1`, `.github/README.md`(템플릿 소개), `.github/ROADMAP.md`(템플릿 개선 계획), `.github/hook-tests/`(훅 회귀 테스트), `.github/workflows/template-ci.yml`(템플릿 CI) | 가져오지 않는다 |
 
 목록에 없는 새 파일이 템플릿에 생기면 템플릿 소유로 보고 추가하되, 요약에 따로 표시한다.
+
+**lite 프로젝트(`scale=lite`)**: [01-idea-spec.md](01-idea-spec.md) "lite에서 두지 않는 파일" 목록에 있는 템플릿 소유 파일은 프로젝트에 없어도 다시 추가하지 않는다(새로 생긴 템플릿 파일이 그 목록에 속하면 마찬가지). 그 목록 자체가 바뀌었으면 요약에 표시한다. full로 전환할 때 한꺼번에 가져온다.
 
 **spec 경로 변경(PRD → SPEC.md)**: `docs/product/PRD.md`가 있는 프로젝트는 `git mv`로 `docs/SPEC.md`로 옮기고, 템플릿 SPEC.md의 구조(기능별 소절·시나리오·표시)로 바꾸는 수정안을 만들어 [승인 요청]한다. 기존 요구사항의 ID는 그대로 쓰고, 옮긴 시나리오는 사람이 확인하기 전까지 `[제안]`으로 둔다.
 

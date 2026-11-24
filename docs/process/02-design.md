@@ -50,4 +50,6 @@
 | Android/Kotlin/JVM | Gradle 멀티 프로젝트 (`settings.gradle.kts`) | Gradle |
 | 혼합 | 언어별 워크스페이스를 각 앱 폴더에 두고 | 루트 Makefile/justfile로 통합 |
 
-**게이트 [승인 요청]**: 첫 구현에 필요한 기술 선택이 모두 ADR로 남았고, 설계 문서를 사람이 승인했다. → [03-plan.md](03-plan.md)
+**lite일 때**: 추천 기준은 같다. 결정은 ADR 하나("스택·개발 환경·릴리즈")로 묶고 설계 문서(`docs/architecture/`)는 만들지 않는다. 모노레포 대신 단일 앱 구조로 두고 AGENTS.md "저장소 구조"를 그에 맞게 쓴다. 이 ADR은 1단계 spec 승인 요청에 함께 올려 한 번에 승인받는다([01-idea-spec.md](01-idea-spec.md) "규모").
+
+**게이트 [승인 요청]**: 첫 구현에 필요한 기술 선택이 모두 ADR로 남았고, 설계 문서를 사람이 승인했다(lite는 1단계 게이트에서 함께). → [03-plan.md](03-plan.md)
