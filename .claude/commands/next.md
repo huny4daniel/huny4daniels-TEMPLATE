@@ -4,7 +4,7 @@ description: 현재 진행 상태를 파악하고 다음 행동을 제안
 
 docs/PROCESS.md 협업 규칙을 따른다. 현재 단계(유지보수 모드면 docs/process/maintenance.md)의 docs/process/ 문서를 읽고 그 게이트 조건을 기준으로 판단한다.
 
-1. docs/STATUS.md를 읽고 현재 단계, 진행 중 작업, 사람 대기 항목을 파악한다. spec 상태는 docs/SPEC.md 전체를 읽지 말고 기능 제목 줄과 표시만 본다(`grep -nE "^### F-|\[미정\]|\[제안\]" docs/SPEC.md`).
+1. docs/STATUS.md를 읽고 현재 단계, 진행 중 작업, 사람 대기 항목을 파악한다. spec 상태는 docs/SPEC.md 전체를 읽지 말고 `bash .claude/hooks/spec-coverage.sh --summary`의 요약을 본다(기능별 상태·`[미정]`·`[제안]`·커버리지·다음 후보).
 2. 진행 중 작업이 있으면 해당 docs/plans/ 문서의 체크박스와 진행 기록을 읽는다. `git status`, `git log -5`로 기록 이후의 변경도 확인한다.
 3. STATUS.md와 실제 상태(문서·코드·이슈)가 다르면 실제 상태를 기준으로 STATUS.md를 고치고 그 사실을 알린다.
 4. 다음 행동을 정한다:

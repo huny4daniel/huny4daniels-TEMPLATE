@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # Stop 훅: Claude가 응답을 마치려 할 때, 코드가 바뀌었으면 린트(바뀐 파일)·타입 체크·단위 테스트를 돌린다.
+# SPEC_TEST_GLOB가 있으면 spec 커버리지(spec-coverage.sh)도 검사한다 — spec만 바뀐 경우엔 이것만.
 # 실패하면 응답 종료를 막고(decision: block) 실패 내용을 Claude에게 돌려 고치게 한다.
 #
 # - 바뀐 코드 파일이 없거나, 같은 상태로 이미 통과했으면 건너뛴다 (.claude/hooks/.last-pass).
@@ -18,16 +19,20 @@ conf="$root/.claude/hooks/checks.env"
 [ -f "$conf" ] || exit 0
 # shellcheck disable=SC1090
 . "$conf"
-[ -n "$LINT_CMD$TYPECHECK_CMD$TEST_CMD" ] || exit 0
+[ -n "$LINT_CMD$TYPECHECK_CMD$TEST_CMD$SPEC_TEST_GLOB" ] || exit 0
 cd "$root" || exit 0
 git rev-parse --is-inside-work-tree >/dev/null 2>&1 || exit 0
 
-# 바뀐 코드 파일 (수정·추가·미추적, 삭제 제외). 이름 변경은 새 이름만.
-changed="$(git status --porcelain --untracked-files=all 2>/dev/null | grep -v '^ \?D' | cut -c4- \
-  | sed -e 's/.* -> //' -e 's/^"//' -e 's/"$//' | grep -E -- "$FILE_PATTERN")"
-[ -n "$changed" ] || exit 0
+# 바뀐 파일 (수정·추가·미추적, 삭제 제외). 이름 변경은 새 이름만.
+all_changed="$(git status --porcelain --untracked-files=all 2>/dev/null | grep -v '^ \?D' | cut -c4- \
+  | sed -e 's/.* -> //' -e 's/^"//' -e 's/"$//')"
+changed="$(printf '%s\n' "$all_changed" | grep -E -- "$FILE_PATTERN")"   # 코드 파일 (린트 대상)
+spec_path="${SPEC_FILE:-docs/SPEC.md}"
+watch="$changed"   # 이 파일들이 바뀌었을 때만 검사한다. spec이 바뀌면 커버리지 검사가 필요하다
+[ -n "$SPEC_TEST_GLOB" ] && printf '%s\n' "$all_changed" | grep -qxF -- "$spec_path" && watch="$(printf '%s\n%s' "$changed" "$spec_path" | sed '/^$/d')"
+[ -n "$watch" ] || exit 0
 
-state="$( { git diff HEAD -- . ':!.claude/hooks/.last-pass' ':!.claude/hooks/.last-fail' 2>/dev/null; printf '%s\n' "$changed" | while IFS= read -r f; do [ -f "$f" ] && cat "$f"; done; } | cksum)"
+state="$( { git diff HEAD -- . ':!.claude/hooks/.last-pass' ':!.claude/hooks/.last-fail' 2>/dev/null; printf '%s\n' "$watch" | while IFS= read -r f; do [ -f "$f" ] && cat "$f"; done; } | cksum)"
 pass_file="$root/.claude/hooks/.last-pass"
 fail_file="$root/.claude/hooks/.last-fail"
 [ -f "$pass_file" ] && [ "$(cat "$pass_file")" = "$state" ] && { rm -f "$fail_file"; exit 0; }
@@ -52,11 +57,16 @@ if [ -n "$LINT_CMD" ]; then
     out="$(bash -c "$LINT_CMD \"\$@\"" _ "${files[@]}" 2>&1)" || add_failure "린트" "$LINT_CMD" "$out"
   fi
 fi
-if [ -n "$TYPECHECK_CMD" ]; then
+# 타입 체크·테스트는 코드가 바뀌었을 때만 (spec만 바뀌었으면 커버리지 검사만)
+if [ -n "$TYPECHECK_CMD" ] && [ -n "$changed" ]; then
   out="$(bash -c "$TYPECHECK_CMD" 2>&1)" || add_failure "타입 체크" "$TYPECHECK_CMD" "$out"
 fi
-if [ -n "$TEST_CMD" ]; then
+if [ -n "$TEST_CMD" ] && [ -n "$changed" ]; then
   out="$(bash -c "$TEST_CMD" 2>&1)" || add_failure "테스트" "$TEST_CMD" "$out"
+fi
+# spec 커버리지 (ROADMAP G5): Done 기능의 시나리오마다 테스트가 있는가, 사람 확인 전 판단이 남아 있지 않은가
+if [ -n "$SPEC_TEST_GLOB" ] && [ -f "$lib/spec-coverage.sh" ]; then
+  out="$(bash "$lib/spec-coverage.sh" 2>&1)" || add_failure "spec 커버리지" "$spec_path" "$out"
 fi
 
 if [ -z "$report" ]; then

@@ -45,7 +45,7 @@
 │   └── architecture/ adr/ plans/ runbooks/ postmortems/ retros/
 ├── .claude/
 │   ├── commands/          /kickoff /next /plan /adr /review /fix /wrap
-│   ├── hooks/             guard.sh · check-file.sh · check-turn.sh · lib.sh · checks.env
+│   ├── hooks/             guard.sh · check-file.sh · check-turn.sh · spec-coverage.sh · lib.sh · checks.env
 │   └── settings.json      훅 등록, 파일 도구의 비밀 파일 읽기 금지
 └── .github/               CI 뼈대, 이슈·PR 템플릿
     ├── hook-tests/        훅 회귀 테스트 (템플릿 전용)
@@ -82,7 +82,8 @@
 | spec은 계속 갱신 | 범위·동작이 바뀌면 **같은 커밋/PR에서 SPEC.md를 먼저** 고치고 변경 이력에 남긴다. 기능은 지우지 않고 상태(`Planned`→`Done`/`Dropped`)로, 범위 밖 요청은 백로그 절에. `/review`·`/wrap`·PR 체크리스트가 누락을 점검 |
 | ID 사슬 | `F-ID → 이슈 [F-01] → 계획 "구현할 시나리오" → 테스트 이름·주석(F-01.1) → PR`. 시나리오마다 실패하는 테스트부터(TDD). 버그는 spec 위반(회귀 테스트) / spec 공백(시나리오 먼저 추가)으로 나눈다 |
 | lite일 때 | 같은 SPEC.md를 짧게. 시나리오는 테스트를 쓸 기능에만, 계획은 `docs/plans/mvp.md` 체크리스트(기능 ID만) |
-| 이어질 장치 | G5 — `Done` 기능의 시나리오마다 테스트가 있는지 Stop 훅·CI가 검사. G4 — 마일스톤 끝에 spec과 코드를 대조. G6 — 탐색 경로 운영. D1 — lite 모드 전체 ([ROADMAP](ROADMAP.md)) |
+| 기계적 강제 | `Done`이라고 적으려면 자동 시나리오마다 ID가 달린 테스트가 있어야 하고, `[제안]`·`[미정]`이 없어야 한다. Stop 훅·CI가 검사한다(`spec-coverage.sh`, 아래 안전장치 표) |
+| 이어질 장치 | G4 — 마일스톤 끝에 spec과 코드를 의미 수준에서 대조. G6 — 탐색 경로 운영. D1 — lite 모드 전체 ([ROADMAP](ROADMAP.md)) |
 
 ## 안전장치
 
@@ -91,6 +92,7 @@
 | 셸 명령 직전 | `guard.sh` (PreToolUse) | main/태그/force push, PR 병합, 릴리즈, 재귀 삭제, 배포, 외부 API 쓰기, **셸로 비밀 파일 다루기** → 확인 창. PR 병합은 `gh pr checks`로 CI를 조회해 실패·진행 중이면 거부. 판정 대상은 명령 문자열뿐이고(description·cwd 무시), main push는 `git push`의 대상·현재 브랜치·upstream으로 판정 |
 | 파일 수정 직후 | `check-file.sh` (PostToolUse) | 포매터·린터 실행, 오류면 에이전트에게 되돌림 |
 | 응답 종료 시 | `check-turn.sh` (Stop) | 코드가 바뀌었으면 린트·타입 체크·테스트, 실패면 종료를 막고 고치게 함 (같은 상태 재검사 생략, 반복 방지) |
+| 응답 종료 시·CI | `spec-coverage.sh` | **spec대로 만들었는가**: `Done` 기능의 시나리오마다 테스트에 ID가 있는지, `Done` 기능에 사람 확인 전 판단(`[제안]`·`[미정]`)이 남지 않았는지 검사해 실패면 막는다. `--summary`는 `/next`가 쓰는 spec 상태 요약 |
 | 파일 도구 사용 시 | `settings.json` deny | `.env`·키스토어·인증서·SSH 키를 Read 등 파일 도구로 읽지 못하게 함 (셸 경유는 위 `guard.sh` 확인 창) |
 | PR | CI | 설치·린트·타입 체크·테스트·빌드 |
 

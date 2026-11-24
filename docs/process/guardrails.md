@@ -8,6 +8,7 @@ AI의 판단에 맡기지 않고 **기계적으로** 동작하는 장치들. 지
 | 위험 작업 확인 | PreToolUse 훅 | `.claude/hooks/guard.sh` | 위험 명령 직전에 사람 확인 창 |
 | 파일 수정 직후 검사 | PostToolUse 훅 | `.claude/hooks/check-file.sh` | 수정한 파일에 포매터·린터 실행, 오류면 Claude에게 되돌림 |
 | 응답 종료 시 검사 | Stop 훅 | `.claude/hooks/check-turn.sh` | 코드가 바뀌었으면 타입 체크·단위 테스트, 실패면 응답 종료를 막고 고치게 함 |
+| spec 커버리지 | Stop 훅·CI | `.claude/hooks/spec-coverage.sh` | `Done` 기능의 자동 시나리오마다 테스트에 ID가 있는지, `Done` 기능에 `[제안]`·`[미정]`·`[탐색]`이 남지 않았는지 검사. 실패면 응답 종료를 막는다 |
 | 비밀 파일 — 파일 도구 | 권한 deny | `.claude/settings.json` | Read·Grep 등 **파일 도구**로 `.env`, 키스토어, 인증서, SSH 키 읽기 금지 (셸 명령에는 적용되지 않음) |
 | 비밀 파일 — 셸 경유 | PreToolUse 훅 | `.claude/hooks/guard.sh` | 셸 명령에 비밀 파일 이름이 있으면 확인 창 (`cat .env`, `cp .env …`, `base64 *.jks` 등). 막지는 않음 |
 | 병합 전 검사 | CI | `.github/workflows/ci.yml` | PR마다 설치·린트·타입 체크·테스트·빌드 |
@@ -45,6 +46,23 @@ AI의 판단에 맡기지 않고 **기계적으로** 동작하는 장치들. 지
 - 오탐이 있다: 비밀 파일 이름을 언급만 하는 명령(예: `.gitignore`에 `.env`를 추가하는 `echo`)도 확인 창이 뜬다. 확인 창이라 감수한다.
 
 **더 강하게 막으려면 (선택)**: Claude Code 샌드박스(`"sandbox": { "enabled": true }`)를 켜면 `Read(...)` deny 규칙이 Bash 명령에도 OS 수준으로 적용되어 패턴 우회가 불가능해진다. 다만 네트워크·쓰기 제한도 함께 걸려 gh·패키지 설치·빌드에 허용 설정이 필요하므로 템플릿 기본값으로는 켜지 않는다. 쓰는 Claude Code 버전의 문서에서 지원 범위를 확인하고 프로젝트별로 결정한다(결정하면 ADR).
+
+## spec 커버리지 (spec-coverage.sh)
+
+"spec대로 만들었는가"를 기계적으로 확인하는 장치다. 린트·테스트는 "코드가 깨지지 않았는가"만 본다.
+
+| 검사 | 실패 조건 |
+|---|---|
+| 시나리오별 테스트 | SPEC.md에서 상태가 `Done`인 기능의 자동 시나리오(`(수동)` 제외) ID가 `SPEC_TEST_GLOB` 파일 어디에도 없다. ID 형식은 `F-03.1` 또는 `f03_1`·`F03_1` |
+| 사람의 판단 | `Done` 기능에 `[제안]`·`[미정]` 시나리오가 남아 있다 — 사람이 확인하지 않은 판단은 완료가 될 수 없다 |
+| 탐색 | `[탐색]` 기능이 `Done`이다 — 탐색을 끝내고 시나리오를 쓴 뒤 `[탐색]`을 뗀다 |
+
+- `Planned`·`In Progress` 기능은 검사하지 않는다. 개발 중에 매번 막히지 않게 하고, 규칙을 **"Done이라고 적으려면 시나리오마다 테스트가 있어야 한다"**로 둔다.
+- 테스트에만 있고 spec에 없는 ID는 참고로 알린다(실패 아님).
+- 실행 시점: Stop 훅(SPEC.md나 코드가 바뀌었을 때 — spec만 바뀌면 타입 체크·테스트는 돌리지 않고 이 검사만), CI(`ci.yml`의 spec 커버리지 스텝), 릴리즈 전(06-release.md).
+- 설정: `checks.env`의 `SPEC_FILE`, `SPEC_TEST_GLOB`. glob이 비어 있으면 검사하지 않는다. 3단계 Walking Skeleton에서 채운다.
+- **요약**: `bash .claude/hooks/spec-coverage.sh --summary`는 기능별 우선순위·상태·`[미정]`·`[제안]` 수와 커버리지, 다음 후보를 한 화면으로 출력한다. `/next`와 세션 시작 브리핑이 SPEC.md 전체 대신 이것을 읽는다.
+- **한계**: ID가 테스트 파일에 있는지만 본다. 그 테스트가 시나리오를 제대로 검증하는지는 `/review`와 5단계 spec 대조가 본다. 기계는 존재를, 리뷰는 의미를 본다.
 
 ## 자동 검증 (check-file.sh, check-turn.sh)
 

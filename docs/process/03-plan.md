@@ -9,7 +9,7 @@
 
 1. 첫 마일스톤은 **Walking Skeleton**: 모든 계층(UI → 로직 → 저장 → 빌드 → 배포)을 최소 기능으로 관통하는 실행 가능한 뼈대. 이때 함께 붙인다:
    - 개발 환경: ADR "개발 환경과 도구"대로 워크스페이스·버전 고정·린트·테스트 설정을 만든다. 깨끗한 환경(새 clone)에서 AGENTS.md의 명령만으로 설치 → 테스트 → 빌드가 통과하는지 확인한다.
-   - 자동 검증 훅: `.claude/hooks/checks.env`에 포매터·린터·타입 체크·단위 테스트 명령을 AGENTS.md 명령과 같게 채운다. 일부러 린트 오류와 실패 테스트를 만들어 훅이 잡는지 확인한 뒤 되돌린다 ([guardrails.md](guardrails.md)).
+   - 자동 검증 훅: `.claude/hooks/checks.env`에 포매터·린터·타입 체크·단위 테스트 명령을 AGENTS.md 명령과 같게 채운다. 일부러 린트 오류와 실패 테스트를 만들어 훅이 잡는지 확인한 뒤 되돌린다 ([guardrails.md](guardrails.md)). `SPEC_TEST_GLOB`에 테스트 위치를 넣고, 테스트 없는 기능을 잠깐 `Done`으로 바꿔 spec 커버리지 검사가 막는지도 확인한다.
    - CI: `.github/workflows/ci.yml`의 명령을 AGENTS.md 명령과 같게 채운다.
    - 릴리즈: 2단계 ADR에서 정한 방식대로 릴리즈 워크플로를 만들고, 테스트 태그(예: `v0.0.1`)로 한 번 끝까지 돌려 본다 (태그 push는 [승인 요청]). 확인이 끝난 테스트 릴리즈는 삭제할지 pre-release로 남길지 [질문]한다.
    - main 보호: CI가 동작하면 보호 규칙을 켤지 [질문]한다 ([git-flow.md](git-flow.md) "main 보호").
