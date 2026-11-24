@@ -48,6 +48,8 @@ hasc() { [[ $cmd =~ $1 ]]; }
 # 대소문자를 구분한다 (process.env.HOME 같은 환경 변수 접근은 통과).
 secret_scan=${cmd//.env.example/}; secret_scan=${secret_scan//.env.sample/}
 secret_scan=${secret_scan//.env.template/}; secret_scan=${secret_scan//.env.dist/}
+# 템플릿의 검사 설정(.claude/hooks/checks.env)은 비밀이 아니다 — 에이전트 평가(H2)에서 오탐으로 확인됨
+secret_scan=${secret_scan//checks.env/}
 if [[ $secret_scan =~ (\.env([^.A-Za-z0-9_]|\.[a-z]+|$)|\.(jks|keystore|pem|p12|pfx|key)([^A-Za-z0-9]|$)|id_(rsa|ed25519|ecdsa)([^A-Za-z0-9._]|$)) ]]; then
   ask "[비밀 값] 비밀 파일(${BASH_REMATCH[1]})을 셸로 읽거나 다루는 명령입니다. 값을 출력·전송·커밋하지 않는지 확인하세요."
 fi
