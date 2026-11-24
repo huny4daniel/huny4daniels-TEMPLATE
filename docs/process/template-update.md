@@ -21,7 +21,7 @@ date=YYYY-MM-DD
 |---|---|---|
 | **템플릿 소유** — 절차·도구. 프로젝트에서 고치지 않는다 | `docs/PROCESS.md`, `docs/README.md`, `docs/process/*`, `docs/templates/*`, `.claude/commands/*`, `.claude/hooks/*.sh`, `.github/ISSUE_TEMPLATE/*`, `.github/pull_request_template.md`, `.editorconfig` | 새 버전으로 교체 (추가·삭제 포함). 단, 기록된 버전 이후 프로젝트에서 직접 고친 파일이면 3-way 병합 |
 | **프로젝트 소유** — 프로젝트 내용을 채운 파일 | `AGENTS.md`, `CLAUDE.md`, `docs/STATUS.md`, `.claude/hooks/checks.env`, `.claude/settings.json`, `README.md`, `CONTRIBUTING.md`, `CHANGELOG.md`, `.github/workflows/*`, `.gitignore`, `.gitattributes`, `.env.example`, `docs/product/*`, `docs/architecture/*`, `docs/adr/*`, `docs/plans/*`, `docs/runbooks/*`, `docs/postmortems/*`, `docs/retros/*`, `apps/`, `packages/`, `tools/` | **덮어쓰지 않는다.** 템플릿 쪽에서 구조가 바뀐 경우(새 섹션, 새 설정 키, 새 훅, 새 import)만 프로젝트 내용을 유지한 채 추가하는 변경을 제안한다 |
-| 제외 | `tools/scripts/new-project.ps1` (템플릿 전용) | 가져오지 않는다 |
+| 제외 | 템플릿 전용: `tools/scripts/new-project.ps1`, `.github/README.md`(템플릿 소개), `.github/ROADMAP.md`(템플릿 개선 계획) | 가져오지 않는다 |
 
 목록에 없는 새 파일이 템플릿에 생기면 템플릿 소유로 보고 추가하되, 요약에 따로 표시한다.
 

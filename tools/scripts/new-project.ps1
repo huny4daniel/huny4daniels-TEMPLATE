@@ -15,8 +15,9 @@ $target = Join-Path $Path $Name
 
 if (Test-Path $target) { throw "이미 존재하는 경로: $target" }
 
-# .git, 이 스크립트, 훅 캐시 파일은 복사하지 않는다
-robocopy $template $target /E /XD .git /XF new-project.ps1 .last-pass .last-fail .template-check .template-version /NFL /NDL /NJH /NJS | Out-Null
+# .git, 템플릿 전용 파일(이 스크립트, 템플릿 소개·로드맵), 훅 캐시 파일은 복사하지 않는다
+$templateOnly = @('.github\README.md', '.github\ROADMAP.md') | ForEach-Object { Join-Path $template $_ }
+robocopy $template $target /E /XD .git /XF new-project.ps1 .last-pass .last-fail .template-check .template-version @templateOnly /NFL /NDL /NJH /NJS | Out-Null
 if ($LASTEXITCODE -ge 8) { throw "복사 실패 (robocopy $LASTEXITCODE)" }
 
 # 적용한 템플릿 버전 기록 (docs/process/template-update.md)
