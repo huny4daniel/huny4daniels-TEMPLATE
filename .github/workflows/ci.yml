@@ -39,4 +39,4 @@ jobs:
       - name: Placeholder
         run: echo "CI 명령을 채우세요"
 
-# 릴리즈 빌드는 태그(v*) 트리거의 release.yml을 별도로 둔다 (docs/PROCESS.md 6단계).
+# 릴리즈 빌드는 태그(v*) 트리거의 release.yml을 별도로 둔다 (방식은 2단계 ADR에서 정한다 — docs/process/02-design.md, 03-plan.md).

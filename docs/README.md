@@ -2,7 +2,8 @@
 
 | 폴더/파일 | 내용 |
 |---|---|
-| [PROCESS.md](PROCESS.md) | 프로젝트 진행 절차 매뉴얼 (역할 분담, 단계, 협업 규칙) |
+| [PROCESS.md](PROCESS.md) | 진행 절차 핵심 규칙과 목차 (세션마다 자동 로드) |
+| [process/](process/) | 단계별 상세 절차 (필요할 때만 읽음) |
 | [STATUS.md](STATUS.md) | 현재 단계, 다음 할 일, 결정·가정, 세션 로그 |
 | [product/](product/) | 아이디어 브리프, PRD 등 제품 요구사항 |
 | [architecture/](architecture/) | 아키텍처 개요, 기능별 설계 문서 |

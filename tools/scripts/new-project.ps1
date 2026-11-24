@@ -36,4 +36,4 @@ try {
 } finally { Pop-Location }
 
 Write-Host "생성 완료: $target"
-Write-Host "다음 단계: docs/PROCESS.md 0단계 → AGENTS.md 자리표시자 채우기"
+Write-Host "다음 단계: Claude Code에서 /kickoff 실행"
