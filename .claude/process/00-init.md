@@ -11,3 +11,5 @@
 - 원격 저장소가 없으면 만들지 [질문]한다.
 - git 훅 켜기: `git config core.hooksPath .githooks` — Claude Code를 거치지 않은 커밋·push(사람, 다른 에이전트)에도 같은 린트·테스트·spec 커버리지 검사를 건다([guardrails.md](guardrails.md) "git 훅"). 컴퓨터마다 clone한 뒤 한 번 필요하다.
 - 훅 동작 확인: 셸 명령을 하나 실행해 훅 오류가 없는지 본다. "Git Bash wasn't found" 오류가 나면 다른 작업보다 먼저 해결한다(설정 전까지 셸 명령이 막힌다). 사람에게 경로를 묻기 전에 먼저 찾는다 — [guardrails.md](guardrails.md) "Windows 주의"의 탐지 방법(PowerShell 도구 사용)으로 찾으면 사용자 설정에 넣고 재시작을 [요청]하고, 못 찾을 때만 Git 설치 폴더를 [질문]한다.
+
+**게이트**: 저장소가 있고 STATUS.md의 현재 단계가 1로 바뀌었다. → [01-idea-spec.md](01-idea-spec.md)
