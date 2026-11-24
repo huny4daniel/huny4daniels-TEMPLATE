@@ -1,6 +1,12 @@
 # 기존 프로젝트 도입
 
-이미 진행 중인 프로젝트에는 템플릿을 덮어쓰지 않고 단계적으로 도입한다. `/adopt` 명령으로 진행하며, 빈 폴더에서 실행하면 새 프로젝트로 시작한다.
+이미 진행 중인 프로젝트에는 템플릿을 덮어쓰지 않고 단계적으로 도입한다. `/adopt` 명령으로 진행한다. `/adopt`는 폴더 상태를 보고 세 경로 중 하나로 동작한다:
+
+| 경로 | 판단 기준 | 문서 |
+|---|---|---|
+| 업데이트 | `.template-version` 있음, 또는 `docs/PROCESS.md`·`docs/STATUS.md`가 함께 있음 | [template-update.md](template-update.md) |
+| 새 프로젝트 | 소스 코드·커밋 없음 (README·LICENSE·.gitignore 정도만) | [00-init.md](00-init.md) → `/kickoff` |
+| 기존 프로젝트 도입 | 그 외 | 이 문서 |
 
 `/adopt`는 아직 템플릿이 없는 폴더에서 실행해야 하므로 이 저장소가 아니라 플러그인([huny4daniels-claude-plugin](https://github.com/huny4daniel/huny4daniels-claude-plugin))으로 배포한다. 컴퓨터마다 한 번 설치한다 (비공개 저장소라 `gh auth login` 필요):
 

@@ -23,7 +23,7 @@ changed="$(git status --porcelain --untracked-files=all 2>/dev/null | grep -v '^
   | sed -e 's/.* -> //' -e 's/^"//' -e 's/"$//' | grep -E -- "$FILE_PATTERN")"
 [ -n "$changed" ] || exit 0
 
-state="$( { git diff HEAD 2>/dev/null; printf '%s\n' "$changed" | while IFS= read -r f; do [ -f "$f" ] && cat "$f"; done; } | cksum)"
+state="$( { git diff HEAD -- . ':!.claude/hooks/.last-pass' ':!.claude/hooks/.last-fail' 2>/dev/null; printf '%s\n' "$changed" | while IFS= read -r f; do [ -f "$f" ] && cat "$f"; done; } | cksum)"
 pass_file="$root/.claude/hooks/.last-pass"
 fail_file="$root/.claude/hooks/.last-fail"
 [ -f "$pass_file" ] && [ "$(cat "$pass_file")" = "$state" ] && { rm -f "$fail_file"; exit 0; }
