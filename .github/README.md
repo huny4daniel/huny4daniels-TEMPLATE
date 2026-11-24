@@ -67,6 +67,17 @@
 
 상세: [docs/PROCESS.md](../docs/PROCESS.md)
 
+### spec 규칙
+
+에이전트는 계획을 세울 때 spec을 그대로 믿고 읽는다. 그래서 spec이 낡지 않게, 그리고 코드까지 추적되게 한다.
+
+| 규칙 | 내용 |
+|---|---|
+| spec은 계속 갱신 | spec = `docs/product/PRD.md`. 범위·동작이 바뀌면 **같은 커밋/PR에서 spec을 먼저** 고치고 변경 이력에 남긴다. STATUS.md 결정 기록엔 한 줄과 링크만. 요구사항은 지우지 않고 상태(`Planned`→`Done`/`Dropped`)로 관리, 범위 밖 요청은 백로그 절에. `/review`·`/wrap`·PR 체크리스트가 누락을 점검 |
+| 요구사항 ID | 기능 `F-01`, 비기능 `NF-01`, 시나리오 `F-01.1`. 재사용 금지. `F-ID → 이슈 [F-01] → 계획 → 테스트 이름·주석 → PR`로 잇고, 마일스톤 끝에 Must마다 Done·이슈·테스트를 확인 |
+| 수용 기준 | 계획·이슈는 spec에 정의된 시나리오 ID를 참조한다. 시나리오 형식(Given-When-Then)과 위치는 설계 변경 중 ([ROADMAP](ROADMAP.md) G2) |
+| lite일 때 | 브리프(`idea-brief.md`)가 spec. MVP 기능 목록에 F-ID, "변경 이력"·"나중에"(백로그) 절로 같은 갱신 규칙. 추적 사슬은 `F-ID → mvp.md 체크리스트 항목 → 테스트`로 줄인다 (lite 모드 자체는 ROADMAP D1에서 도입 예정) |
+
 ## 안전장치
 
 | 시점 | 장치 | 동작 |

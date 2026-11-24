@@ -1,8 +1,11 @@
 ---
 name: 기능 요청
 about: 새 기능 또는 개선 (수직 슬라이스 단위)
+title: "[F-] "
 labels: enhancement
 ---
+
+<!-- 제목은 [F-01] 형식으로 요구사항 ID를 붙인다. 요구사항이 없는 작업(설정·정리 등)은 [chore]. -->
 
 ## 목표
 
@@ -15,7 +18,7 @@ labels: enhancement
 
 ## 관련 문서
 
-- PRD: F-
+- 요구사항 (필수): F-  <!-- PRD 5절 ID, lite는 브리프 MVP 목록 ID. 없으면 [chore] -->
 - ADR / 설계:
 
 ## 범위 밖

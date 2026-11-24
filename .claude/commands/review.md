@@ -11,5 +11,7 @@ description: 현재 변경 사항을 Definition of Done 기준으로 점검
    - 계획 문서의 "Claude 실행 확인" 시나리오를 실제로 돌렸는지와 결과
    - 이번 작업에서 반복된 실수가 있으면 AGENTS.md Gotchas 추가 제안
    - ADR / CHANGELOG / README 갱신 필요 여부
+   - 요구사항 ID 사슬: 바뀐 코드가 계획 문서의 F-ID에 속하는가(범위 밖 변경은 없는가), 계획이 참조하는 시나리오 ID마다 대응 테스트(이름·주석의 ID)가 있는가, 브랜치의 PR·이슈에 F-ID(또는 chore)가 있는가
+   - spec 갱신 필요 여부: 이번 변경이 spec(docs/product/PRD.md, lite는 브리프)과 다르게 동작하거나 spec에 없는 동작을 추가했는가. 그렇다면 spec 본문·요구사항 상태·변경 이력이 같은 변경에 들어 있는가
    - 비밀 값 포함 여부
 3. 수정은 하지 않고 발견 사항만 심각도 순으로 나열한다.
