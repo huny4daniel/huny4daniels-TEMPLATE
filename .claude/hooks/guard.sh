@@ -9,20 +9,49 @@
 #   3) 배포: 패키지 저장소 publish, docker push, 클라우드·서버 배포 명령
 #   4) 외부 API 쓰기: curl/wget/Invoke-* 의 POST·PUT·PATCH·DELETE, gh api 쓰기 요청
 #
-# 외부 도구(jq 등) 없이 bash + grep만 사용한다. 조회·작업 브랜치 push·PR 생성은 통과한다.
+# 외부 도구(jq 등) 없이 동작한다. 조회·작업 브랜치 push·PR 생성은 통과한다.
+# 모든 셸 명령마다 실행되므로 판정은 bash 내장 정규식으로 하고(프로세스 생성 없음),
+# 관련 단어가 없는 명령은 곧바로 통과시킨다.
 
-input="$(cat)"
+IFS= read -r -d '' input || true
 
 ask() {
   printf '{"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"ask","permissionDecisionReason":"%s"}}\n' "$1"
   exit 0
 }
 
-has() { printf '%s' "$input" | grep -Eiq -- "$1"; }
+deny() {
+  printf '{"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"deny","permissionDecisionReason":"%s"}}\n' "$1"
+  exit 0
+}
+
+# has: 대소문자 무시 / hasc: 대소문자 구분 (bash 내장 ERE)
+has()  { shopt -s nocasematch; [[ $input =~ $1 ]]; local r=$?; shopt -u nocasematch; return $r; }
+hasc() { [[ $input =~ $1 ]]; }
+
+# 빠른 통과: 판정 대상 명령어가 하나도 없으면 바로 종료
+has '(^|[^A-Za-z0-9_-])(git|gh|rm|rmdir|rd|del|remove-item|npm|pnpm|yarn|bun|twine|uv|poetry|cargo|gem|gradlew?|docker|kubectl|helm|terraform|firebase|netlify|fly|flyctl|wrangler|railway|vercel|gcloud|aws|curl|wget|invoke-webrequest|invoke-restmethod|iwr|irm)([^A-Za-z0-9_-]|$)' || exit 0
 
 # ---------- 1) main 반영·태그·릴리즈 ----------
+# PR 병합: 먼저 CI 상태를 조회한다. 실패·진행 중이면 거부, 통과면 사람 확인.
+# (GitHub 보호 규칙의 "CI 통과 필수"를 비공개 저장소에서도 대신하기 위함)
 if has 'gh[[:space:]]+pr[[:space:]]+merge'; then
-  ask "[main 반영] PR 병합입니다. CI 통과와 승인 여부를 확인하세요. (docs/process/git-flow.md)"
+  # 'gh pr merge <번호|브랜치|URL>'의 대상. 없으면 현재 브랜치의 PR.
+  target="$(printf '%s' "$input" | grep -oE 'gh[[:space:]]+pr[[:space:]]+merge[[:space:]]+[^-[:space:]"\\][^[:space:]"\\]*' | head -1 | awk '{print $4}')"
+  checks="$(cd "${CLAUDE_PROJECT_DIR:-.}" 2>/dev/null && gh pr checks $target 2>&1)"
+  rc=$?
+  summary="$(printf '%s' "$checks" | tr -d '"\\' | tr '\t\r\n' '   ' | cut -c1-300)"
+  case $rc in
+    0) ask "[main 반영] PR 병합입니다. CI 통과 확인됨. 병합 승인 여부를 확인하세요. (docs/process/git-flow.md)" ;;
+    8) deny "[CI 진행 중] 아직 CI가 끝나지 않아 병합할 수 없습니다. 'gh pr checks --watch'로 완료를 기다린 뒤 다시 시도하세요. ($summary)" ;;
+  esac
+  if printf '%s' "$checks" | grep -qi 'no checks reported'; then
+    ask "[main 반영] PR 병합입니다. 이 PR에는 CI 결과가 없습니다 (CI 미설정 또는 미실행). 그래도 병합할지 확인하세요."
+  fi
+  if printf '%s' "$checks" | grep -Eqi '(fail|cancel|error)[[:space:]]' && ! printf '%s' "$checks" | grep -Eqi '(could not|not found|no pull requests|authentication|gh auth login|network)'; then
+    deny "[CI 실패] CI가 통과하지 않아 병합할 수 없습니다. 실패한 검사를 고친 뒤 다시 시도하세요. ($summary)"
+  fi
+  ask "[main 반영] PR 병합입니다. CI 상태를 확인하지 못했습니다 ($summary). CI 통과 여부를 직접 확인하세요."
 fi
 if has 'gh[[:space:]]+release[[:space:]]+(create|delete|edit|upload)'; then
   ask "[릴리즈] GitHub 릴리즈 생성·수정·삭제입니다. (docs/process/06-release.md)"
@@ -37,7 +66,7 @@ if has 'git([[:space:]]+-C[[:space:]]+[^[:space:]]+)?[[:space:]]+push'; then
   if has '(--tags|--follow-tags|refs/tags/|[[:space:]]v[0-9]+\.[0-9]+)'; then
     ask "[릴리즈] 버전 태그 push입니다. 릴리즈 워크플로가 실행될 수 있습니다. (docs/process/06-release.md)"
   fi
-  if printf '%s' "$input" | grep -Eq '(^|[^A-Za-z0-9_./-])(main|master)([^A-Za-z0-9_./-]|$)'; then
+  if hasc '(^|[^A-Za-z0-9_./-])(main|master)([^A-Za-z0-9_./-]|$)'; then
     ask "[main 반영] main 브랜치 push입니다. 직접 반영이 허용된 변경(문서만 수정 등)인지 확인하세요. (docs/process/git-flow.md)"
   fi
   if ! has '(feature/|fix/|docs/|HEAD:)'; then
@@ -58,7 +87,7 @@ fi
 if has 'git[[:space:]]+reset[[:space:]]+[^|;&]*--hard' || has 'git[[:space:]]+clean[[:space:]]+-[A-Za-z]*f'; then
   ask "[삭제] 커밋되지 않은 작업을 지우는 명령입니다 (reset --hard / clean -f)."
 fi
-if printf '%s' "$input" | grep -Eq 'git[[:space:]]+branch[[:space:]]+[^|;&]*-D' || has 'git[[:space:]]+(checkout|restore)[[:space:]]+(--[[:space:]]+)?\.([[:space:]"]|$|\\)' || has 'git[[:space:]]+stash[[:space:]]+(drop|clear)'; then
+if hasc 'git[[:space:]]+branch[[:space:]]+[^|;&]*-D' || has 'git[[:space:]]+(checkout|restore)[[:space:]]+(--[[:space:]]+)?\.([[:space:]"]|$|\\)' || has 'git[[:space:]]+stash[[:space:]]+(drop|clear)'; then
   ask "[삭제] 브랜치 강제 삭제 또는 작업 내용 폐기입니다."
 fi
 if has 'gh[[:space:]]+(repo|issue|label|secret|variable)[[:space:]]+delete' || has 'gh[[:space:]]+repo[[:space:]]+(archive|edit[^|;&]*--visibility)'; then

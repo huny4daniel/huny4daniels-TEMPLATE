@@ -26,7 +26,8 @@ AI의 판단에 맡기지 않고 **기계적으로** 동작하는 장치들. 지
 
 | 분류 | 대상 명령 |
 |---|---|
-| main 반영 | main/master push, main에 있는 상태의 push, force push, `gh pr merge` |
+| main 반영 | main/master push, main에 있는 상태의 push, force push |
+| PR 병합 | `gh pr merge` 전에 `gh pr checks`로 CI 상태를 조회한다. **실패·진행 중이면 거부**(확인 창 없이 막음), 통과면 확인 창, CI 결과가 없거나 조회할 수 없으면 그 사실을 알리고 확인 창 |
 | 릴리즈 | 버전 태그 push, `gh release create/delete/edit/upload` |
 | 삭제·되돌리기 불가 | `rm -r`, `Remove-Item -Recurse`, `git reset --hard`, `git clean -f`, `git branch -D`, `git checkout/restore .`, `git stash drop/clear`, 원격 브랜치·태그 삭제, `gh repo/issue/secret delete`, 저장소 보관·공개 범위 변경 |
 | 배포 | `npm/pnpm/uv/poetry/cargo publish`, `gradle publish`, `docker push`, `kubectl/helm/terraform` 적용, `firebase/vercel/netlify/fly` 배포 등 |

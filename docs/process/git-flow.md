@@ -27,7 +27,7 @@
 
 ### 로컬 확인 훅 (기본으로 켜져 있음)
 
-`.claude/hooks/guard.sh`가 main/master push, 태그 push, force push, 원격 삭제, `gh pr merge`, 릴리즈 변경 직전에 **사람 확인 창**을 띄운다. 막지는 않으므로 문서만 main에 바로 커밋·push하는 경우도 확인 후 진행할 수 있다. 작업 브랜치(`feature/`, `fix/`, `docs/`) push와 PR 생성은 확인 없이 진행된다. 전체 대상과 조정 방법은 [guardrails.md](guardrails.md).
+`.claude/hooks/guard.sh`가 main/master push, 태그 push, force push, 원격 삭제, `gh pr merge`, 릴리즈 변경 직전에 **사람 확인 창**을 띄운다. `gh pr merge`는 먼저 CI 상태를 조회해 실패·진행 중이면 병합을 거부한다 — 비공개 저장소에서도 "CI 통과 필수"가 기계적으로 지켜진다 (Claude를 거치지 않은 병합·push는 막지 못한다). 막지는 않으므로 문서만 main에 바로 커밋·push하는 경우도 확인 후 진행할 수 있다. 작업 브랜치(`feature/`, `fix/`, `docs/`) push와 PR 생성은 확인 없이 진행된다. 전체 대상과 조정 방법은 [guardrails.md](guardrails.md).
 
 ### GitHub 보호 규칙
 
@@ -35,4 +35,4 @@
 
 - 규칙: `main` 직접 push 금지(PR 필수), 병합 전 CI 상태 체크 통과 필수, force push·삭제 금지.
 - 문서만 바로 커밋하는 경우를 위해 저장소 관리자 우회(bypass)를 허용할지, 모든 변경을 PR로 할지 함께 정한다.
-- GitHub Free 플랜의 **비공개 저장소는 보호 규칙을 쓸 수 없다** (공개 저장소 또는 Pro 이상 필요). 이 경우 보호 규칙 대신 "CI 통과 확인 전에는 병합하지 않는다"를 Claude가 지키는 규칙으로 대신하고, 그 결정을 STATUS.md 결정 기록에 남긴다.
+- GitHub Free 플랜의 **비공개 저장소는 보호 규칙을 쓸 수 없다** (공개 저장소 또는 Pro 이상 필요). 이 경우 위의 로컬 확인 훅(main push 확인, CI 실패 시 병합 거부)이 대신하며, 그 결정을 STATUS.md 결정 기록에 남긴다. 보호 규칙과의 차이는 Claude를 거치지 않은 push·병합(터미널·IDE에서 직접)은 막지 못한다는 점뿐이다.
