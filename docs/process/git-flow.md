@@ -27,13 +27,7 @@
 
 ### 로컬 확인 훅 (기본으로 켜져 있음)
 
-`.claude/settings.json`의 PreToolUse 훅(`.claude/hooks/guard-main.sh`)이 Claude가 다음 명령을 실행하기 직전에 **사람 확인 창**을 띄운다. 막지는 않으므로 문서만 main에 바로 커밋·push하는 경우도 확인 후 진행할 수 있다.
-
-- main/master push, 현재 브랜치가 main/master인 상태의 push
-- 버전 태그 push, force push, 원격 브랜치·태그 삭제
-- `gh pr merge`, `gh release create/delete/edit`
-
-작업 브랜치(`feature/`, `fix/`, `docs/`) push와 PR 생성은 확인 없이 진행된다. 끄거나 조정하려면 `/hooks` 메뉴나 settings 파일을 고친다. 훅은 bash로 실행되므로 Windows에서는 Git Bash가 필요하다 (Claude Code 설치 시 함께 쓰는 환경).
+`.claude/hooks/guard.sh`가 main/master push, 태그 push, force push, 원격 삭제, `gh pr merge`, 릴리즈 변경 직전에 **사람 확인 창**을 띄운다. 막지는 않으므로 문서만 main에 바로 커밋·push하는 경우도 확인 후 진행할 수 있다. 작업 브랜치(`feature/`, `fix/`, `docs/`) push와 PR 생성은 확인 없이 진행된다. 전체 대상과 조정 방법은 [guardrails.md](guardrails.md).
 
 ### GitHub 보호 규칙
 

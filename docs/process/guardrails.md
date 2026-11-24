@@ -1,0 +1,45 @@
+# 안전장치와 자동 검증
+
+AI의 판단에 맡기지 않고 **기계적으로** 동작하는 장치들. 지시문(AGENTS.md, PROCESS.md)은 Claude가 지키려고 노력하는 규칙이고, 아래는 Claude가 잊어도 항상 실행되는 장치다.
+
+| 계층 | 장치 | 위치 | 동작 |
+|---|---|---|---|
+| 규칙 문서 | 코딩 컨벤션·아키텍처 제약·자주 하는 실수 | `AGENTS.md` | 세션마다 자동 로드 |
+| 위험 작업 확인 | PreToolUse 훅 | `.claude/hooks/guard.sh` | 위험 명령 직전에 사람 확인 창 |
+| 파일 수정 직후 검사 | PostToolUse 훅 | `.claude/hooks/check-file.sh` | 수정한 파일에 포매터·린터 실행, 오류면 Claude에게 되돌림 |
+| 응답 종료 시 검사 | Stop 훅 | `.claude/hooks/check-turn.sh` | 코드가 바뀌었으면 타입 체크·단위 테스트, 실패면 응답 종료를 막고 고치게 함 |
+| 비밀 값 차단 | 권한 deny | `.claude/settings.json` | `.env`, 키스토어, 인증서 파일 읽기 금지 |
+| 병합 전 검사 | CI | `.github/workflows/ci.yml` | PR마다 설치·린트·타입 체크·테스트·빌드 |
+| main 보호 | GitHub ruleset (선택) | 저장소 설정 | PR·CI 통과 없이 main 반영 금지 ([git-flow.md](git-flow.md)) |
+
+훅은 bash로 실행된다 (Windows는 Git Bash). 조정·끄기는 `/hooks` 메뉴 또는 `.claude/settings.json`.
+
+## 위험 작업 확인 (guard.sh)
+
+막지 않고 확인 창을 띄운다. 사람이 확인하면 그대로 진행된다.
+
+| 분류 | 대상 명령 |
+|---|---|
+| main 반영 | main/master push, main에 있는 상태의 push, force push, `gh pr merge` |
+| 릴리즈 | 버전 태그 push, `gh release create/delete/edit/upload` |
+| 삭제·되돌리기 불가 | `rm -r`, `Remove-Item -Recurse`, `git reset --hard`, `git clean -f`, `git branch -D`, `git checkout/restore .`, `git stash drop/clear`, 원격 브랜치·태그 삭제, `gh repo/issue/secret delete`, 저장소 보관·공개 범위 변경 |
+| 배포 | `npm/pnpm/uv/poetry/cargo publish`, `gradle publish`, `docker push`, `kubectl/helm/terraform` 적용, `firebase/vercel/netlify/fly` 배포 등 |
+| 외부 API 쓰기 | `curl/wget/Invoke-*`의 POST·PUT·PATCH·DELETE·데이터 전송, `gh api` 쓰기 요청 |
+
+통과하는 것: 조회(GET, `gh ... view/list`), 작업 브랜치 push, PR 생성, 일반 파일 삭제(`rm 파일`), 빌드·테스트 명령.
+
+한계: 명령 문자열 패턴으로 판정하므로 스크립트 파일 안에서 실행되는 위험 명령이나 MCP 도구 호출은 잡지 못한다. 그런 작업은 PROCESS.md 게이트 규칙(사람 승인)으로 다룬다.
+
+## 자동 검증 (check-file.sh, check-turn.sh)
+
+설정은 `.claude/hooks/checks.env` 한 곳에 둔다. 비어 있으면 아무것도 하지 않으므로 템플릿 상태에서는 꺼져 있고, **3단계 Walking Skeleton에서 AGENTS.md 명령과 같게 채운다.**
+
+| 항목 | 실행 시점 | 실패 시 |
+|---|---|---|
+| `FORMAT_CMD` | 대상 파일(`FILE_PATTERN`)을 수정한 직후 | 무시 (포맷만 적용) |
+| `LINT_CMD` | 〃 | 오류를 Claude에게 되돌려 바로 고치게 함 |
+| `TYPECHECK_CMD`, `TEST_CMD` | Claude가 응답을 마치려 할 때, 코드 파일이 바뀌었을 때만 | 응답 종료를 막고 실패 내용으로 고치게 함 |
+
+- 같은 상태로 이미 통과했으면 다시 돌리지 않는다 (`.claude/hooks/.last-pass`, git 제외).
+- 훅 때문에 이어진 응답에서 또 실패하면 더 막지 않고 경고만 띄운다 (무한 반복 방지). 이때 Claude는 실패를 숨기지 말고 [질문]이나 [요청]으로 보고한다.
+- 단위 테스트가 길어지면(수십 초 이상) `TEST_CMD`를 빠른 테스트 묶음으로 좁히고, 전체 테스트는 CI에 맡긴다.

@@ -9,7 +9,8 @@
       "Read(./.env)",
       "Read(./.env.*)",
       "Read(**/*.keystore)",
-      "Read(**/*.jks)"
+      "Read(**/*.jks)",
+      "Read(**/*.pem)"
     ]
   },
   "hooks": {
@@ -19,8 +20,31 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/guard-main.sh\"",
+            "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/guard.sh\"",
             "timeout": 10
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/check-file.sh\"",
+            "timeout": 60
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/check-turn.sh\"",
+            "timeout": 600
           }
         ]
       }
