@@ -28,13 +28,13 @@ jobs:
 
       - name: 줄바꿈 확인 (훅·테스트 파일은 LF)
         run: |
-          if grep -lI $'\r' .claude/hooks/*.sh .claude/hooks/checks.env .github/hook-tests/*.bats .github/hook-tests/*.bash .github/hook-tests/*.tsv .github/hook-tests/fake-bin/*; then
+          if grep -lI $'\r' .claude/hooks/*.sh .claude/hooks/checks.env .github/hook-tests/*.bats .github/hook-tests/*.bash .github/hook-tests/*.tsv .github/hook-tests/fake-bin/* .githooks/*; then
             echo "CRLF가 들어간 파일이 있습니다 (.gitattributes 확인)"; exit 1
           fi
 
       - name: shellcheck
         if: runner.os == 'Linux'
-        run: shellcheck -x -S warning .claude/hooks/*.sh .github/hook-tests/fake-bin/gh
+        run: shellcheck -x -S warning .claude/hooks/*.sh .githooks/* .github/hook-tests/fake-bin/gh
 
       - name: bats 설치
         run: git clone --quiet --depth 1 --branch v1.11.1 https://github.com/bats-core/bats-core.git "$RUNNER_TEMP/bats-core"

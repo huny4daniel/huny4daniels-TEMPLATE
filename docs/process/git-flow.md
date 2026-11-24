@@ -35,4 +35,4 @@
 
 - 규칙: `main` 직접 push 금지(PR 필수), 병합 전 CI 상태 체크 통과 필수, force push·삭제 금지.
 - 문서만 바로 커밋하는 경우를 위해 저장소 관리자 우회(bypass)를 허용할지, 모든 변경을 PR로 할지 함께 정한다.
-- GitHub Free 플랜의 **비공개 저장소는 보호 규칙을 쓸 수 없다** (공개 저장소 또는 Pro 이상 필요). 이 경우 위의 로컬 확인 훅(main push 확인, CI 실패 시 병합 거부)이 대신하며, 그 결정을 STATUS.md 결정 기록에 남긴다. 보호 규칙과의 차이는 Claude를 거치지 않은 push·병합(터미널·IDE에서 직접)은 막지 못한다는 점뿐이다.
+- GitHub Free 플랜의 **비공개 저장소는 보호 규칙을 쓸 수 없다** (공개 저장소 또는 Pro 이상 필요). 이 경우 위의 로컬 확인 훅(main push 확인, CI 실패 시 병합 거부)이 대신하며, 그 결정을 STATUS.md 결정 기록에 남긴다. 보호 규칙과의 차이는 Claude를 거치지 않은 push·병합(터미널·IDE에서 직접)은 막지 못한다는 점이다. 그런 push에도 테스트·spec 커버리지 검사는 git 훅(`.githooks/pre-push`)이 건다([guardrails.md](guardrails.md) "git 훅").

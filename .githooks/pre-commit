@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+# git pre-commit 훅 (ROADMAP E1): Claude Code를 거치지 않은 커밋(사람, 다른 에이전트)에도 같은 린트를 건다.
+# 명령은 .claude/hooks/checks.env의 LINT_CMD를 그대로 쓴다(한 곳에서 관리). 비어 있으면 아무것도 하지 않는다.
+# 스테이징된 코드 파일(FILE_PATTERN)에만 실행한다. 포매터는 스테이징 후 파일을 바꾸므로 여기서 돌리지 않는다.
+# 사람이 의도적으로 건너뛰려면 git commit --no-verify (에이전트는 AGENTS.md 규칙 8에 따라 우회하지 않는다).
+
+root=$(git rev-parse --show-toplevel 2>/dev/null) || exit 0
+cd "$root" || exit 0
+conf=.claude/hooks/checks.env
+[[ -f $conf ]] || exit 0
+LINT_CMD='' FILE_PATTERN=''
+# shellcheck disable=SC1090
+. "$conf"
+[[ -n $LINT_CMD && -n $FILE_PATTERN ]] || exit 0
+
+files=()
+while IFS= read -r f; do
+  [[ -f $f && $f =~ $FILE_PATTERN ]] && files+=("$f")
+done < <(git diff --cached --name-only --diff-filter=ACMR)
+(( ${#files[@]} )) || exit 0
+
+if ! out=$(bash -c "$LINT_CMD \"\$@\"" _ "${files[@]}" 2>&1); then
+  echo "[pre-commit] 린트 실패 (.claude/hooks/checks.env LINT_CMD)" >&2
+  printf '%s\n' "$out" | tail -n 40 >&2
+  exit 1
+fi
+exit 0

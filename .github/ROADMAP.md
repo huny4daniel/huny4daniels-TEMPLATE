@@ -299,7 +299,7 @@ Spec Kit은 spec → 구현에 집중하고, spec과 코드의 대조(analyze·c
 
 ### D2. 응답 꼬리표 규칙 완화
 
-- [ ] 완료
+- [x] 완료 — feature/d2-e1 PR. PROCESS.md 협업 규칙 1에 예외, CLAUDE.md는 그 규칙을 가리키게
 
 **문제**: "매 응답은 [질문]/[제안]/[승인 요청]/[요청]으로 끝낸다"는 진행 중에는 유용하지만, 단순 질의응답("이 함수 뭐 해?")에도 적용되면 군더더기가 된다.
 
@@ -324,7 +324,7 @@ Spec Kit은 spec → 구현에 집중하고, spec과 코드의 대조(analyze·c
 
 ### E1. git 훅으로 같은 검사 공유
 
-- [ ] 완료
+- [x] 완료 — feature/d2-e1 PR. `.githooks/pre-commit`(스테이징된 코드 파일 린트), `pre-push`(테스트 + spec 커버리지, main·태그는 알림만). 0단계에서 `core.hooksPath`, 도입 모드는 기존 훅 도구가 있으면 덮어쓰지 않음. 회귀 테스트 6개(`githooks.bats`), 템플릿 CI의 shellcheck·줄바꿈 검사 대상에 추가
 
 **문제**: 안전장치가 Claude Code 훅에만 있다. AGENTS.md를 읽는 다른 에이전트(Codex 등)나 사람이 터미널·IDE에서 직접 하는 push·커밋은 검사를 거치지 않는다. git-flow.md도 "Claude를 거치지 않은 push·병합은 막지 못한다"고 적고 있다. 비공개 저장소라 GitHub 보호 규칙도 못 쓴다.
 

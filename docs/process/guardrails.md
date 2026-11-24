@@ -80,6 +80,19 @@ AI의 판단에 맡기지 않고 **기계적으로** 동작하는 장치들. 지
 - 같은 실패는 한 번만 막는다 (`.claude/hooks/.last-fail`). 실패 중인 테스트를 두고 사람의 답을 기다릴 때(예: 버그 수정 중 계획 승인 요청)는 막힌 응답에서 이유를 설명하고 [질문]으로 끝내면 되고, 이후 같은 상태에서는 경고만 뜬다. 훅으로 이어진 응답에서 또 실패해도 경고만 띄운다 (무한 반복 방지). 어느 경우든 Claude는 실패를 숨기지 않고 보고한다.
 - 단위 테스트가 길어지면(수십 초 이상) `TEST_CMD`를 빠른 테스트 묶음으로 좁히고, 전체 테스트는 CI에 맡긴다.
 
+## git 훅 (.githooks/)
+
+Claude Code 훅은 Claude를 거친 작업에만 걸린다. 사람이 터미널·IDE에서 직접 하거나 다른 에이전트(Codex 등)가 하는 커밋·push에도 같은 검사를 걸기 위해, 같은 `checks.env`를 읽는 git 훅을 둔다. 켜기: `git config core.hooksPath .githooks`(0단계, 컴퓨터마다 한 번).
+
+| 훅 | 하는 일 | 실패 시 |
+|---|---|---|
+| `pre-commit` | 스테이징된 코드 파일(`FILE_PATTERN`)에 `LINT_CMD` | 커밋 중단 |
+| `pre-push` | `TEST_CMD`, spec 커버리지(`SPEC_TEST_GLOB`가 있으면). main·태그 push는 알림만 | push 중단 |
+
+- 명령이 비어 있으면 아무것도 하지 않는다.
+- 사람은 `--no-verify`로 건너뛸 수 있다(실수 방지가 목적). 에이전트는 AGENTS.md 규칙 8에 따라 우회하지 않는다.
+- main 직접 push를 **막지는** 않는다 — 비공개 저장소에서 막으려면 GitHub 보호 규칙(유료 플랜)이 필요하다([git-flow.md](git-flow.md) "main 보호").
+
 ## 훅 이벤트 로그
 
 템플릿이 실제로 일하고 있는지 보여주는 근거다. 훅 세 개가 판정할 때마다 `.claude/metrics/events.jsonl`(git 제외, 로컬에만)에 한 줄씩 남긴다.
