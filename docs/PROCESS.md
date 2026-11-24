@@ -94,7 +94,7 @@
 | `/review` | 변경 사항을 Definition of Done 기준으로 점검 |
 | `/fix <이슈 또는 증상>` | 버그 분류 후 수정 루프 진행 (유지보수 모드) |
 | `/wrap` | 세션 마무리: 상태·진행 기록 갱신, 커밋 제안 |
-| `/adopt [템플릿 경로]` | 이미 진행 중인 프로젝트에 이 구조·절차를 도입 |
+| `/adopt [템플릿 경로]` | 이미 진행 중인 프로젝트에 이 구조·절차를 도입 (플러그인 — 아래 "기존 프로젝트에 도입" 참고) |
 
 ---
 
@@ -329,6 +329,13 @@ Explore → Plan → [승인] → Code → Verify → Commit → 기록
 ## 기존 프로젝트에 도입
 
 이미 진행 중인 프로젝트에는 템플릿을 덮어쓰지 않고 단계적으로 도입한다. `/adopt` 명령으로 진행한다.
+
+`/adopt`는 아직 템플릿이 없는 프로젝트에서 실행해야 하므로 이 저장소가 아니라 플러그인([huny4daniels-claude-plugin](https://github.com/huny4daniel/huny4daniels-claude-plugin))으로 배포한다. 컴퓨터마다 한 번 설치한다:
+
+```bash
+claude plugin marketplace add huny4daniel/huny4daniels-claude-plugin
+claude plugin install project-process@huny4daniels
+```
 
 1. **비침습 추가** — 문서·에이전트 설정·이슈/PR 템플릿만 추가한다. 이미 있는 파일(CLAUDE.md, README, .gitignore, CI, release.yml)은 덮어쓰지 않고 필요한 부분만 합친다.
 2. **역방향 문서화** — 코드에서 현재 상태를 읽어 문서를 만든다. Claude가 초안을 쓰고 사람은 확인만 한다.
