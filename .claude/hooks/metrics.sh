@@ -38,6 +38,8 @@ function num(name,   re, s) {
     if (ms >= 0) times[++nt] = ms
   } else if (hook == "check-file") {
     f[res]++
+  } else if (hook == "spec-confirm") {
+    sc++
   }
 }
 END {
@@ -48,6 +50,7 @@ END {
   printf "- 응답 종료 검사: 통과 %d · 차단 %d%s · 경고 %d", t["pass"], t["block"], (s ? " (" s ")" : ""), t["warn"]
   if (blocked_total) printf " · 차단 뒤 같은 세션에서 통과 %d/%d", fixed, blocked_total
   printf "\n- 파일 수정 직후 린트 실패 %d\n", f["lint-fail"]
+  printf "- spec 판단 확정 확인 창 %d\n", sc
   if (nt) {
     # 삽입 정렬 (건수가 적다)
     for (i = 2; i <= nt; i++) { v = times[i]; j = i - 1; while (j >= 1 && times[j] > v) { times[j + 1] = times[j]; j-- } times[j + 1] = v }

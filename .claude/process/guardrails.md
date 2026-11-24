@@ -8,6 +8,7 @@ AI의 판단에 맡기지 않고 **기계적으로** 동작하는 장치들. 지
 | 위험 작업 확인 | PreToolUse 훅 | `.claude/hooks/guard.sh` | 위험 명령 직전에 사람 확인 창 |
 | 파일 수정 직후 검사 | PostToolUse 훅 | `.claude/hooks/check-file.sh` | 수정한 파일에 포매터·린터 실행, 오류면 Claude에게 되돌림 |
 | 응답 종료 시 검사 | Stop 훅 | `.claude/hooks/check-turn.sh` | 코드가 바뀌었으면 타입 체크·단위 테스트, 실패면 응답 종료를 막고 고치게 함 |
+| 판단 확정 확인 | PreToolUse 훅 (Write·Edit) | `.claude/hooks/spec-confirm.sh` | SPEC.md의 시나리오 표시가 `[제안]`·`[미정]`에서 `[확정]`으로 바뀌면 확인 창. 한 번의 수정에 든 확정은 창 하나에 목록으로. 허용 클릭이 곧 사람의 판단이다 |
 | spec 커버리지 | Stop 훅·CI | `.claude/hooks/spec-coverage.sh` | `Done` 기능의 자동 시나리오마다 테스트에 ID가 있는지, `Done` 기능에 `[제안]`·`[미정]`·`[탐색]`이 남지 않았는지 검사. 실패면 응답 종료를 막는다 |
 | 비밀 파일 — 파일 도구 | 권한 deny | `.claude/settings.json` | Read·Grep 등 **파일 도구**로 `.env`, 키스토어, 인증서, SSH 키 읽기 금지 (셸 명령에는 적용되지 않음) |
 | 비밀 파일 — 셸 경유 | PreToolUse 훅 | `.claude/hooks/guard.sh` | 셸 명령에 비밀 파일 이름이 있으면 확인 창 (`cat .env`, `cp .env …`, `base64 *.jks` 등). 막지는 않음 |
