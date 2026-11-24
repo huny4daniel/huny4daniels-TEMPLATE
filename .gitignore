@@ -16,6 +16,7 @@ desktop.ini
 CLAUDE.local.md
 .claude/hooks/.last-pass
 .claude/hooks/.last-fail
+.claude/.template-check
 
 # Python
 __pycache__/

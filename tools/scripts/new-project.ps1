@@ -15,9 +15,15 @@ $target = Join-Path $Path $Name
 
 if (Test-Path $target) { throw "이미 존재하는 경로: $target" }
 
-# .git과 이 스크립트 자신은 복사하지 않는다
-robocopy $template $target /E /XD .git /XF new-project.ps1 /NFL /NDL /NJH /NJS | Out-Null
+# .git, 이 스크립트, 훅 캐시 파일은 복사하지 않는다
+robocopy $template $target /E /XD .git /XF new-project.ps1 .last-pass .last-fail .template-check .template-version /NFL /NDL /NJH /NJS | Out-Null
 if ($LASTEXITCODE -ge 8) { throw "복사 실패 (robocopy $LASTEXITCODE)" }
+
+# 적용한 템플릿 버전 기록 (docs/process/template-update.md)
+$sha = (git -C $template rev-parse HEAD).Trim()
+if (git -C $template status --porcelain) { Write-Warning "템플릿 폴더에 커밋되지 않은 변경이 있습니다. 기록되는 버전($sha)과 실제 복사된 내용이 다를 수 있습니다." }
+$ver = "repo=huny4daniel/huny4daniels-TEMPLATE`ncommit=$sha`ndate=$(Get-Date -Format yyyy-MM-dd)`n"
+[IO.File]::WriteAllText((Join-Path $target '.template-version'), $ver, (New-Object Text.UTF8Encoding $false))
 
 # 프로젝트 이름 자리표시자 치환
 Get-ChildItem $target -Recurse -File -Include *.md | ForEach-Object {

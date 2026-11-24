@@ -51,6 +51,7 @@
 | 유지보수 모드 (버그 처리) | [process/maintenance.md](process/maintenance.md) | 우선순위 승인 |
 | Git 작업 흐름, main 보호 | [process/git-flow.md](process/git-flow.md) | 병합 승인 |
 | 안전장치·자동 검증 훅 | [process/guardrails.md](process/guardrails.md) | — |
+| 템플릿 업데이트 반영 | [process/template-update.md](process/template-update.md) | 업데이트 내용 승인 |
 | 기존 프로젝트 도입 | [process/adopt.md](process/adopt.md) | — |
 
 ## 명령어
@@ -64,7 +65,7 @@
 | `/review` | 변경 사항을 DoD 기준으로 점검 |
 | `/fix <이슈 또는 증상>` | 버그 분류 후 수정 루프 |
 | `/wrap` | 세션 마무리: 상태·기록 갱신, 커밋 제안 |
-| `/adopt [템플릿 경로]` | 빈 폴더·기존 프로젝트에 이 구조 적용 (플러그인, [process/adopt.md](process/adopt.md)) |
+| `/adopt [템플릿 경로]` | 빈 폴더·기존 프로젝트에 이 구조 적용, 이미 적용된 프로젝트는 템플릿 업데이트 반영 (플러그인, [process/adopt.md](process/adopt.md), [process/template-update.md](process/template-update.md)) |
 
 ## 문서 위치
 
