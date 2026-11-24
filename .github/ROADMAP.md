@@ -23,7 +23,7 @@
 
 ### A1. 셸을 거친 비밀 파일 읽기
 
-- [ ] 완료
+- [x] 완료 — 6f3f951 (샌드박스는 네트워크·쓰기 제한이 함께 걸려 기본값으로 켜지 않고 guardrails.md에 선택지로 안내)
 
 **문제**: `settings.json`의 `Read(./.env)` 등 deny 규칙은 Claude Code의 파일 도구(Read·Grep·Glob 등)에만 적용된다. Bash/PowerShell에서 `cat .env`, `Get-Content .env`, `type .env`는 그대로 실행되고, `guard.sh`도 이를 판정하지 않는다. `guardrails.md`는 "비밀 값 차단"이라고 적고 있어 실제보다 강하게 보인다.
 
@@ -45,7 +45,7 @@
 
 ### A2. guard.sh가 명령 외의 필드까지 검사함
 
-- [ ] 완료
+- [x] 완료 — b0e4302
 
 **문제**: `guard.sh`는 훅 입력 JSON 전체(`$input`)에 정규식을 건다. 이 JSON에는 `tool_input.command` 외에 `description`, `cwd`, `transcript_path`, `session_id`가 들어 있다. 그 결과 두 방향으로 틀린다.
 - **놓침(위험)**: main 직접 push 판정은 `feature/|fix/|docs/|HEAD:`가 입력 어디에든 있으면 건너뛴다. 현재 브랜치가 main인데 `git push`의 description이 "docs/STATUS.md 갱신 후 푸시"면 확인 창 없이 main에 push된다.
@@ -75,7 +75,7 @@
 
 ### A3. check-file.sh의 JSON 파싱
 
-- [ ] 완료
+- [x] 완료 — c758794 (실패 확인: template-ci run 45342500943 ubuntu, 통과: 45342988614)
 
 **문제**: `"file_path":"..."`를 `[^"]*`로 잘라내므로 경로에 따옴표가 있으면 깨진다. 백슬래시는 `\\` → `/`로만 바꿔 다른 이스케이프는 처리하지 않는다.
 
@@ -89,7 +89,7 @@
 
 ### B1. 훅 회귀 테스트와 템플릿 CI
 
-- [ ] 완료
+- [x] 완료 — ee0f5ce(테스트 틀), 41faec8(CI·전용 파일 목록), f1fbf16(Windows bats 대응). 예시와 다른 점: 테스트 이름은 영문(Windows bats가 한글 이름을 처리하지 못함), JSON 인코딩은 python 대신 bash, 성능 기준은 Linux 50ms·Windows 250ms(bash 기동 비용 차이)
 
 **문제**: `guard.sh`는 정규식 수십 개로 판정하는데 테스트가 없다. 템플릿 자체에 CI도 없다(`ci.yml`은 프로젝트용 자리표시자). 에이전트에게는 "테스트 없이 넘어가지 마라"고 요구하면서 안전장치 코드는 검증하지 않는 셈이다. 실제로 A2의 놓침도 테스트가 있었다면 드러났을 종류다.
 

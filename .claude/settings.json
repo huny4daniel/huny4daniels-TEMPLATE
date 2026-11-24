@@ -10,7 +10,11 @@
       "Read(./.env.*)",
       "Read(**/*.keystore)",
       "Read(**/*.jks)",
-      "Read(**/*.pem)"
+      "Read(**/*.pem)",
+      "Read(**/*.p12)",
+      "Read(**/*.pfx)",
+      "Read(**/id_rsa)",
+      "Read(**/id_ed25519)"
     ]
   },
   "hooks": {

@@ -3,7 +3,11 @@
 # 린트 오류가 남으면 exit 2 + stderr로 Claude에게 되돌려 즉시 고치게 한다.
 # 설정: .claude/hooks/checks.env (비어 있으면 아무것도 하지 않음)
 
-input="$(cat)"
+# shellcheck disable=SC2034  # $input은 lib.sh의 json_field가 읽는다
+IFS= read -r -d '' input || true
+lib="${BASH_SOURCE[0]%/*}"; [[ $lib == "${BASH_SOURCE[0]}" ]] && lib=.
+# shellcheck source=lib.sh
+. "$lib/lib.sh" 2>/dev/null || exit 0
 root="${CLAUDE_PROJECT_DIR:-.}"
 conf="$root/.claude/hooks/checks.env"
 [ -f "$conf" ] || exit 0
@@ -11,11 +15,11 @@ conf="$root/.claude/hooks/checks.env"
 . "$conf"
 [ -n "$FORMAT_CMD$LINT_CMD" ] || exit 0
 
-# tool_input.file_path 추출 (jq 없이). Windows 경로의 \\ 는 / 로 바꾼다.
-file="$(printf '%s' "$input" | grep -o '"file_path"[[:space:]]*:[[:space:]]*"[^"]*"' | head -1 \
-  | sed -e 's/^"file_path"[[:space:]]*:[[:space:]]*"//' -e 's/"$//' -e 's#\\\\#/#g')"
-[ -n "$file" ] && [ -f "$file" ] || exit 0
-printf '%s' "$file" | grep -Eq -- "$FILE_PATTERN" || exit 0
+# tool_input.file_path 추출 (lib.sh: JSON 이스케이프 디코딩 → Windows 경로는 bash 경로로 변환)
+file="$(json_field file_path)" || exit 0
+file="$(to_posix_path "$file")"
+[[ -n $file && -f $file ]] || exit 0
+[[ $file =~ $FILE_PATTERN ]] || exit 0
 
 cd "$root" || exit 0
 

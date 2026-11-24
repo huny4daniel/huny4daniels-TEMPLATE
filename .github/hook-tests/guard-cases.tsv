@@ -1,0 +1,82 @@
+# guard.sh 판정 픽스처 (탭 구분): 기대값	명령	메모
+# 기대값: pass(출력 없음) / ask(확인 창) / deny(거부)
+# 저장소는 작업 브랜치(feature/base) 상태에서 실행된다. main 브랜치 상태의 판정은 guard.bats에서 따로 검사한다.
+# 훅을 고치는 커밋에는 이 표에 케이스를 함께 추가한다.
+pass	git status
+pass	git commit -m test
+pass	git log --oneline main
+pass	git push -u origin feature/12-login
+pass	git push origin fix/3-crash
+pass	git push origin docs/readme
+pass	gh pr create --fill
+ask	git push origin main
+ask	git push origin v1.2.0
+ask	git push --tags
+ask	git push --force origin feature/1-x
+ask	git push -f
+ask	git push origin --delete feature/1-x
+ask	gh release create v1.0.0
+pass	gh release view v1.0.0
+ask	rm -rf build
+ask	rm -r dist
+pass	rm build.log
+pass	npm run format
+ask	Remove-Item -Recurse -Force .\out
+ask	Remove-Item -Recurse
+ask	Remove-Item .\x -r
+pass	Remove-Item .\a.txt
+ask	git reset --hard HEAD~1
+pass	git reset HEAD file
+ask	git clean -fd
+ask	git branch -D old
+pass	git branch -d merged
+ask	git checkout -- .
+ask	git restore .
+pass	git restore src/a.py
+pass	git checkout feature/x
+ask	git stash drop
+ask	gh repo delete me/x --yes
+ask	gh repo edit --visibility public
+ask	npm publish
+ask	uv publish
+ask	./gradlew publish
+ask	docker push img:1
+ask	terraform apply
+ask	firebase deploy
+ask	vercel --prod
+pass	curl -s https://api.github.com/repos/x
+pass	curl https://example.com
+ask	curl -X POST https://api.x.com/v1 -d '{}'
+ask	curl https://x.com -d a=1
+pass	wget https://x.com/file.zip
+ask	Invoke-RestMethod -Uri https://x -Method Post -Body 1
+pass	Invoke-WebRequest https://x -OutFile a
+pass	gh api repos/me/x
+ask	gh api -X PUT repos/me/x/rulesets
+ask	gh api repos/o/r/rulesets -X POST
+ask	gh api repos/me/x/labels -f name=P0
+pass	gh api repos/o/r/milestones -f title=M1
+pass	gh api -X PATCH repos/me/x/milestones/1 -f state=closed
+ask	gh api -X DELETE repos/me/x/milestones/1
+pass	gh issue create --title a --body b
+pass	gh label create P0
+pass	ls -la
+pass	python -m pytest
+pass	echo main
+pass	gh api repos/huny4daniel/huny4daniels-TEMPLATE/commits/main --jq .sha
+pass	git commit -m "main에 바로 push하지 않도록 수정"	A2 커밋 메시지의 main
+pass	git log --oneline main..feature/x	A2
+ask	git push origin feature/x:main	A2
+ask	cat .env	A1
+pass	cat .env.example	A1
+ask	Get-Content apps/android/keystore/release.jks	A1
+ask	type .env.local	A1 (cmd)
+ask	cp .env /tmp/x	A1 복사 우회
+ask	python -c "print(open('.env').read())"	A1 다른 언어 우회
+ask	base64 release.jks	A1 인코딩 우회
+ask	cat ~/.ssh/id_rsa	A1
+ask	cat certs/server.pem	A1
+ask	cat .env.example .env	A1 예시 파일과 함께
+pass	cp .env.example .env.sample	A1 예시 파일끼리
+pass	node -e "console.log(process.env.HOME)"	A1 환경 변수 접근은 파일 아님
+pass	echo environment	A1

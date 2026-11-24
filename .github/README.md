@@ -42,9 +42,11 @@
 │   └── product/ architecture/ adr/ plans/ runbooks/ postmortems/ retros/
 ├── .claude/
 │   ├── commands/          /kickoff /next /plan /adr /review /fix /wrap
-│   ├── hooks/             guard.sh · check-file.sh · check-turn.sh · checks.env
-│   └── settings.json      훅 등록, 비밀 파일 읽기 차단
+│   ├── hooks/             guard.sh · check-file.sh · check-turn.sh · lib.sh · checks.env
+│   └── settings.json      훅 등록, 파일 도구의 비밀 파일 읽기 금지
 └── .github/               CI 뼈대, 이슈·PR 템플릿
+    ├── hook-tests/        훅 회귀 테스트 (템플릿 전용)
+    └── workflows/template-ci.yml  템플릿 CI (템플릿 전용)
 ```
 
 ## 진행 흐름
@@ -69,15 +71,17 @@
 
 | 시점 | 장치 | 동작 |
 |---|---|---|
-| 셸 명령 직전 | `guard.sh` (PreToolUse) | main/태그/force push, PR 병합, 릴리즈, 재귀 삭제, 배포, 외부 API 쓰기 → 확인 창. PR 병합은 `gh pr checks`로 CI를 조회해 실패·진행 중이면 거부 |
+| 셸 명령 직전 | `guard.sh` (PreToolUse) | main/태그/force push, PR 병합, 릴리즈, 재귀 삭제, 배포, 외부 API 쓰기, **셸로 비밀 파일 다루기** → 확인 창. PR 병합은 `gh pr checks`로 CI를 조회해 실패·진행 중이면 거부. 판정 대상은 명령 문자열뿐이고(description·cwd 무시), main push는 `git push`의 대상·현재 브랜치·upstream으로 판정 |
 | 파일 수정 직후 | `check-file.sh` (PostToolUse) | 포매터·린터 실행, 오류면 에이전트에게 되돌림 |
 | 응답 종료 시 | `check-turn.sh` (Stop) | 코드가 바뀌었으면 린트·타입 체크·테스트, 실패면 종료를 막고 고치게 함 (같은 상태 재검사 생략, 반복 방지) |
-| 항상 | `settings.json` deny | `.env`·키스토어·인증서를 Read 도구로 읽지 못하게 함 |
+| 파일 도구 사용 시 | `settings.json` deny | `.env`·키스토어·인증서·SSH 키를 Read 등 파일 도구로 읽지 못하게 함 (셸 경유는 위 `guard.sh` 확인 창) |
 | PR | CI | 설치·린트·타입 체크·테스트·빌드 |
 
-검사 명령은 `.claude/hooks/checks.env` 한 곳에서 정하고, `AGENTS.md` 명령 표·CI와 같게 유지한다. 템플릿 상태에서는 비어 있어 꺼져 있다.
+검사 명령은 `.claude/hooks/checks.env` 한 곳에서 정하고, `AGENTS.md` 명령 표·CI와 같게 유지한다. 템플릿 상태에서는 비어 있어 꺼져 있다. 훅 공용 함수(JSON 필드 추출, 경로 변환)는 `.claude/hooks/lib.sh`에 있다.
 
-알려진 한계는 [로드맵](ROADMAP.md)에 정리했다 (패턴 판정의 우회 가능성, 셸 경유 비밀 파일 읽기 등).
+**안전장치 자체도 검증한다**: `.github/hook-tests/`(bats)에 판정 픽스처 표와 훅별 회귀 테스트가 있고, 템플릿 CI(`template-ci.yml`)가 ubuntu·Windows에서 shellcheck·줄바꿈 검사와 함께 매 push마다 돌린다. 모든 셸 명령마다 실행되는 `guard.sh`는 성능 기준(케이스당 평균 시간)도 테스트한다.
+
+**알려진 한계**: 명령 문자열 패턴으로 판정하므로 스크립트 파일 안의 명령, 변수로 조립한 명령·경로, MCP 도구 호출은 잡지 못한다(이런 작업은 절차의 사람 승인 게이트로 다룸). 비밀 파일 이름을 언급만 하는 명령에도 확인 창이 뜨는 오탐이 있다. Claude Code를 거치지 않은 push·병합(터미널·IDE 직접 조작)도 막지 못한다. OS 수준으로 막으려면 샌드박스를 켤 수 있다 — 자세한 내용은 [guardrails.md](../docs/process/guardrails.md), 남은 개선은 [로드맵](ROADMAP.md).
 
 ## 사용법
 
@@ -110,6 +114,7 @@ gh repo create <이름> --private --template huny4daniel/huny4daniels-TEMPLATE -
 ## 템플릿 관리
 
 - 파일 소유 구분(템플릿 소유 / 프로젝트 소유 / 템플릿 전용)과 업데이트 절차: [docs/process/template-update.md](../docs/process/template-update.md)
-- 템플릿 전용 파일(새 프로젝트로 복사하지 않음): `.github/README.md`, `.github/ROADMAP.md`, `tools/scripts/new-project.ps1`
-- 도입 명령은 별도 저장소 [huny4daniels-claude-plugin](https://github.com/huny4daniel/huny4daniels-claude-plugin)에 있다. 템플릿 전용 파일 목록을 바꾸면 플러그인의 `adopt.md`와 `new-project.ps1`도 함께 고친다.
+- 템플릿 전용 파일(새 프로젝트로 복사하지 않음): `.github/README.md`, `.github/ROADMAP.md`, `.github/hook-tests/`, `.github/workflows/template-ci.yml`, `tools/scripts/new-project.ps1`
+- 도입 명령은 별도 저장소 [huny4daniels-claude-plugin](https://github.com/huny4daniel/huny4daniels-claude-plugin)에 있다. 템플릿 전용 파일 목록을 바꾸면 플러그인의 `adopt.md`와 `new-project.ps1`도 함께 고친다 (전체 목록: [ROADMAP.md](ROADMAP.md) "변경 시 함께 고칠 곳").
+- 훅을 고치는 커밋에는 `.github/hook-tests/`의 케이스 추가를 함께 넣는다. 로컬 실행: `bats .github/hook-tests` ([bats-core](https://github.com/bats-core/bats-core) 1.11).
 - 개선 계획: [ROADMAP.md](ROADMAP.md)

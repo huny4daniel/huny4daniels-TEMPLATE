@@ -8,7 +8,11 @@
 # - 훅 때문에 이어진 응답(stop_hook_active)에서 또 실패하면 막지 않고 경고만 띄운다 (무한 반복 방지).
 # 설정: .claude/hooks/checks.env
 
-input="$(cat)"
+# shellcheck disable=SC2034  # $input은 lib.sh의 json_bool이 읽는다
+IFS= read -r -d '' input || true
+lib="${BASH_SOURCE[0]%/*}"; [[ $lib == "${BASH_SOURCE[0]}" ]] && lib=.
+# shellcheck source=lib.sh
+. "$lib/lib.sh" 2>/dev/null || exit 0
 root="${CLAUDE_PROJECT_DIR:-.}"
 conf="$root/.claude/hooks/checks.env"
 [ -f "$conf" ] || exit 0
@@ -68,7 +72,7 @@ warn() {
 
 # 이미 보고한 같은 실패 상태, 또는 훅으로 이어진 응답 → 막지 않고 경고만
 [ -f "$fail_file" ] && [ "$(cat "$fail_file")" = "$state" ] && warn
-printf '%s' "$input" | grep -Eq '"stop_hook_active"[[:space:]]*:[[:space:]]*true' && { printf '%s' "$state" > "$fail_file"; warn; }
+json_bool stop_hook_active && { printf '%s' "$state" > "$fail_file"; warn; }
 
 printf '%s' "$state" > "$fail_file"
 printf '{"decision":"block","reason":"%s"}\n' "$(printf '자동 검사(.claude/hooks/checks.env)가 실패했습니다. 원인을 고치고 다시 확인하세요. 의도한 실패(예: 사람 승인을 기다리는 중)거나 고칠 수 없으면 그 이유를 설명하고 [질문]으로 끝내세요 — 같은 실패로 다시 막지 않습니다.\n%s' "$report" | json_escape)"
