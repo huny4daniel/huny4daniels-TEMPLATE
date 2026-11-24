@@ -7,7 +7,9 @@ description: 현재 변경 사항을 Definition of Done 기준으로 점검
    - 계획 문서의 수용 기준 충족 여부
    - 버그·엣지 케이스·오류 처리 누락
    - 테스트 추가 여부, 그리고 AGENTS.md의 테스트·린트·타입 체크 명령 실제 실행 결과
-   - 앱 간 직접 import, packages → apps 의존 등 구조 규칙 위반
+   - AGENTS.md의 아키텍처 제약(의존 방향 등)·코딩 컨벤션 위반
+   - 계획 문서의 "Claude 실행 확인" 시나리오를 실제로 돌렸는지와 결과
+   - 이번 작업에서 반복된 실수가 있으면 AGENTS.md Gotchas 추가 제안
    - ADR / CHANGELOG / README 갱신 필요 여부
    - 비밀 값 포함 여부
 3. 수정은 하지 않고 발견 사항만 심각도 순으로 나열한다.

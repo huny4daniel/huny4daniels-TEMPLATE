@@ -12,7 +12,13 @@ AI의 판단에 맡기지 않고 **기계적으로** 동작하는 장치들. 지
 | 병합 전 검사 | CI | `.github/workflows/ci.yml` | PR마다 설치·린트·타입 체크·테스트·빌드 |
 | main 보호 | GitHub ruleset (선택) | 저장소 설정 | PR·CI 통과 없이 main 반영 금지 ([git-flow.md](git-flow.md)) |
 
-훅은 bash로 실행된다 (Windows는 Git Bash). 조정·끄기는 `/hooks` 메뉴 또는 `.claude/settings.json`.
+훅은 bash로 실행된다. 조정·끄기는 `/hooks` 메뉴 또는 `.claude/settings.json`.
+
+**Windows 주의**: Claude Code가 Git Bash(Git for Windows)를 찾아야 훅이 동작한다. 찾지 못하면 훅이 PowerShell로 실행되어 실패하고, 이때 모든 셸 명령이 막힌다 (오류 메시지에 "Git Bash wasn't found"). Git을 표준 위치가 아닌 곳에 설치했다면 사용자 설정(`~/.claude/settings.json`)에 경로를 지정한다:
+
+```json
+{ "env": { "CLAUDE_CODE_GIT_BASH_PATH": "C:\\설치경로\\Git\\bin\\bash.exe" } }
+```
 
 ## 위험 작업 확인 (guard.sh)
 
@@ -26,7 +32,7 @@ AI의 판단에 맡기지 않고 **기계적으로** 동작하는 장치들. 지
 | 배포 | `npm/pnpm/uv/poetry/cargo publish`, `gradle publish`, `docker push`, `kubectl/helm/terraform` 적용, `firebase/vercel/netlify/fly` 배포 등 |
 | 외부 API 쓰기 | `curl/wget/Invoke-*`의 POST·PUT·PATCH·DELETE·데이터 전송, `gh api` 쓰기 요청 |
 
-통과하는 것: 조회(GET, `gh ... view/list`), 작업 브랜치 push, PR 생성, 일반 파일 삭제(`rm 파일`), 빌드·테스트 명령.
+통과하는 것: 조회(GET, `gh ... view/list`), 작업 브랜치 push, PR 생성, 이슈·라벨·마일스톤 생성, 일반 파일 삭제(`rm 파일`), 빌드·테스트 명령.
 
 한계: 명령 문자열 패턴으로 판정하므로 스크립트 파일 안에서 실행되는 위험 명령이나 MCP 도구 호출은 잡지 못한다. 그런 작업은 PROCESS.md 게이트 규칙(사람 승인)으로 다룬다.
 
@@ -40,6 +46,8 @@ AI의 판단에 맡기지 않고 **기계적으로** 동작하는 장치들. 지
 | `LINT_CMD` | 〃 | 오류를 Claude에게 되돌려 바로 고치게 함 |
 | `TYPECHECK_CMD`, `TEST_CMD` | Claude가 응답을 마치려 할 때, 코드 파일이 바뀌었을 때만 | 응답 종료를 막고 실패 내용으로 고치게 함 |
 
+- 명령은 셸로 해석되므로 따옴표·`&&`를 쓸 수 있다. 예: `TEST_CMD='cd apps/android && ./gradlew test'`, `TEST_CMD='uv run pytest -q -m "not slow"'`
+- 응답 종료 시 린트는 바뀐 코드 파일 전체에 다시 돌린다 (셸 명령으로 고친 파일도 잡기 위함).
 - 같은 상태로 이미 통과했으면 다시 돌리지 않는다 (`.claude/hooks/.last-pass`, git 제외).
-- 훅 때문에 이어진 응답에서 또 실패하면 더 막지 않고 경고만 띄운다 (무한 반복 방지). 이때 Claude는 실패를 숨기지 말고 [질문]이나 [요청]으로 보고한다.
+- 같은 실패는 한 번만 막는다 (`.claude/hooks/.last-fail`). 실패 중인 테스트를 두고 사람의 답을 기다릴 때(예: 버그 수정 중 계획 승인 요청)는 막힌 응답에서 이유를 설명하고 [질문]으로 끝내면 되고, 이후 같은 상태에서는 경고만 뜬다. 훅으로 이어진 응답에서 또 실패해도 경고만 띄운다 (무한 반복 방지). 어느 경우든 Claude는 실패를 숨기지 않고 보고한다.
 - 단위 테스트가 길어지면(수십 초 이상) `TEST_CMD`를 빠른 테스트 묶음으로 좁히고, 전체 테스트는 CI에 맡긴다.

@@ -8,5 +8,6 @@
 - 템플릿 전용 파일 `tools/scripts/new-project.ps1`이 복사돼 있으면 삭제한다.
 - 스택 관련 자리표시자(`{{INSTALL_COMMAND}}` 등)는 2단계에서 스택이 정해진 뒤 채운다.
 - 원격 저장소가 없으면 만들지 [질문]한다.
+- 훅 동작 확인: 셸 명령을 하나 실행해 훅 오류가 없는지 본다. "Git Bash wasn't found" 오류가 나면 [요청]으로 `CLAUDE_CODE_GIT_BASH_PATH` 설정을 안내한다 ([guardrails.md](guardrails.md)). 설정 전까지 셸 명령이 막히므로 다른 작업보다 먼저 해결한다.
 
 **게이트**: 저장소가 있고 STATUS.md의 현재 단계가 1로 바뀌었다. → [01-idea-prd.md](01-idea-prd.md)

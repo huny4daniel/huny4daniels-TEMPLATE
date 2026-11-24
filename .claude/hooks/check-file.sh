@@ -19,12 +19,15 @@ printf '%s' "$file" | grep -Eq -- "$FILE_PATTERN" || exit 0
 
 cd "$root" || exit 0
 
+# 명령 문자열은 셸로 해석해 실행한다 (따옴표·&& 사용 가능). 파일 경로는 마지막 인자로 붙는다.
+run_on_file() { bash -c "$1 \"\$1\"" _ "$2"; }
+
 if [ -n "$FORMAT_CMD" ]; then
-  $FORMAT_CMD "$file" >/dev/null 2>&1
+  run_on_file "$FORMAT_CMD" "$file" >/dev/null 2>&1
 fi
 
 if [ -n "$LINT_CMD" ]; then
-  out="$($LINT_CMD "$file" 2>&1)"
+  out="$(run_on_file "$LINT_CMD" "$file" 2>&1)"
   if [ $? -ne 0 ]; then
     {
       echo "[자동 린트 실패] $file"

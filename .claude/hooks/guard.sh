@@ -83,6 +83,10 @@ if has '(curl|wget|Invoke-WebRequest|Invoke-RestMethod|iwr|irm)([[:space:]]|\.ex
   fi
 fi
 if has 'gh[[:space:]]+api'; then
+  # 마일스톤 생성·수정은 되돌릴 수 있는 계획 작업이라 통과 (삭제는 확인)
+  if has 'repos/[^[:space:]]+/milestones' && ! has '(-X|--method)[[:space:]]*"?DELETE'; then
+    exit 0
+  fi
   if has '(-X|--method)[[:space:]]*"?(POST|PUT|PATCH|DELETE)' || has '[[:space:]](-f|-F|--field|--raw-field|--input)[[:space:]]'; then
     ask "[외부 API] GitHub API 쓰기 요청입니다. (저장소 설정·보호 규칙 변경 등)"
   fi

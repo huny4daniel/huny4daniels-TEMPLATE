@@ -15,6 +15,7 @@ desktop.ini
 .claude/settings.local.json
 CLAUDE.local.md
 .claude/hooks/.last-pass
+.claude/hooks/.last-fail
 
 # Python
 __pycache__/
