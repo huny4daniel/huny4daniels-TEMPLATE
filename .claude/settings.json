@@ -11,5 +11,19 @@
       "Read(**/*.keystore)",
       "Read(**/*.jks)"
     ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash|PowerShell",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/guard-main.sh\"",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
   }
 }
