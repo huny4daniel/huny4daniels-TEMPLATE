@@ -117,7 +117,6 @@
 ### 1. 처음 한 번 (컴퓨터마다)
 
 ```bash
-gh auth login                                                        # 비공개 저장소라 필요
 claude plugin marketplace add huny4daniel/huny4daniels-claude-plugin
 claude plugin install project-process@huny4daniels
 ```

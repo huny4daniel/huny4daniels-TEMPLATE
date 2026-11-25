@@ -82,3 +82,4 @@ pass	cat .claude/hooks/checks.env	H2에서 찾은 오탐: 템플릿 검사 설�
 ask	cat .claude/hooks/checks.env .env	H2 설정 파일과 실제 비밀 파일이 함께
 pass	node -e "console.log(process.env.HOME)"	A1 환경 변수 접근은 파일 아님
 pass	echo environment	A1
+pass	git ls-remote https://github.com/huny4daniel/huny4daniels-TEMPLATE.git refs/heads/main

@@ -8,7 +8,7 @@
 | 새 프로젝트 | 소스 코드·커밋 없음 (README·LICENSE·.gitignore 정도만) | [00-init.md](00-init.md) → `/kickoff` |
 | 기존 프로젝트 도입 | 그 외 | 이 문서 |
 
-`/adopt`는 아직 템플릿이 없는 폴더에서 실행해야 하므로 이 저장소가 아니라 플러그인([huny4daniels-claude-plugin](https://github.com/huny4daniel/huny4daniels-claude-plugin))으로 배포한다. 컴퓨터마다 한 번 설치한다 (비공개 저장소라 `gh auth login` 필요):
+`/adopt`는 아직 템플릿이 없는 폴더에서 실행해야 하므로 이 저장소가 아니라 플러그인([huny4daniels-claude-plugin](https://github.com/huny4daniel/huny4daniels-claude-plugin))으로 배포한다. 컴퓨터마다 한 번 설치한다:
 
 ```bash
 claude plugin marketplace add huny4daniel/huny4daniels-claude-plugin

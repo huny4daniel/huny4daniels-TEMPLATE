@@ -44,8 +44,8 @@ scale=full   # 또는 lite (1단계에서 정함)
 6. 승인되면 `docs/template-update-<최신 짧은 SHA>` 브랜치에서 적용 → `.template-version` 갱신 → 커밋 → PR (.claude/process/git-flow.md). 훅이 바뀌었으면 셸 명령 하나로 훅 동작을 확인한다.
 7. STATUS.md 결정 기록에 "템플릿 업데이트 <기준>→<최신>"을 남긴다.
 
-기준 커밋을 알 수 없으면(`.template-version` 없음) 템플릿 소유 파일을 최신과 파일 단위로 비교해 다른 것을 모두 보여주고, 하나씩 교체 여부를 [질문]한다. 끝나면 `.template-version`을 만든다.
+기준 커밋을 알 수 없으면(`.template-version`이 없거나, 적힌 커밋이 최신 템플릿 이력에 없으면) 템플릿 소유 파일을 최신과 파일 단위로 비교해 다른 것을 모두 보여주고, 하나씩 교체 여부를 [질문]한다. 끝나면 `.template-version`을 만든다.
 
 ## 업데이트 알림
 
-`/next`는 `.template-version`이 있으면 하루 한 번 최신 템플릿 커밋을 확인하고(`gh api repos/<repo>/commits/main --jq .sha`, 확인 날짜는 `.claude/.template-check`에 기록, git 제외), 더 새로우면 업데이트를 한 줄로 [제안]한다. 진행 중인 작업이 있으면 그 작업이 끝난 뒤로 미룬다.
+`/next`는 `.template-version`이 있으면 하루 한 번 최신 템플릿 커밋을 확인하고(`git ls-remote https://github.com/<repo>.git refs/heads/main`, 확인 날짜는 `.claude/.template-check`에 기록, git 제외), 더 새로우면 업데이트를 한 줄로 [제안]한다. 진행 중인 작업이 있으면 그 작업이 끝난 뒤로 미룬다.
