@@ -15,4 +15,4 @@ description: 세션 마무리 — 진행 상태와 기록을 갱신하고 커밋
 5. 자동 로드 문서가 커졌으면 정리를 [제안]한다: STATUS.md 결정 기록이 15줄을 넘으면 오래된 것을 `docs/decisions-log.md`로, AGENTS.md Gotchas가 한 영역에 몰리면 그 폴더의 하위 AGENTS.md로 옮긴다(.claude/process/guardrails.md "컨텍스트 예산").
 6. 이번 세션에서 같은 실수를 반복했거나 환경 함정을 발견했으면 AGENTS.md Gotchas에 추가한다.
 7. 사용자에게 보이는 변경이 있으면 CHANGELOG `[Unreleased]`를 갱신한다.
-8. 변경 요약을 보여주고 커밋한다. 작업 브랜치에 있으면 바로 커밋·push하고, `main`에 직접 커밋해야 하면(문서만 바뀐 경우, .claude/process/git-flow.md) [승인 요청]한다. 다음 세션에서 이어갈 첫 행동을 한 줄로 알려준다.
+8. 변경 요약을 보여주고 커밋한다. 작업 브랜치에 있으면 커밋하고 push한다(세션 종료 백업). `main`에 있으면 직접 커밋하지 않고, 다음 작업 브랜치나 `docs/status-<YYYY-MM-DD>` 브랜치를 만들어 커밋한다(.claude/process/git-flow.md "이력 원칙"). 다음 세션에서 이어갈 첫 행동을 한 줄로 알려준다.
