@@ -4,7 +4,8 @@
 #   spec-coverage.sh            검사: Done 기능의 자동 시나리오마다 테스트에 ID가 있는가,
 #                               Done 기능에 사람 확인 전 판단([제안]·[미정])이나 [탐색]이 남아 있지 않은가.
 #                               문제가 있으면 목록을 출력하고 1로 끝난다. SPEC_TEST_GLOB가 비어 있으면 검사하지 않는다(0).
-#   spec-coverage.sh --summary  요약: 기능별 우선순위·상태·[미정]·[제안] 수와 커버리지, 다음 후보. 항상 0.
+#   spec-coverage.sh --summary  요약: 기능별 우선순위·상태·[미정]·[제안] 수와 커버리지, 다음 후보, 시험 연결
+#                               (시험이 없는 시나리오 ID, 검사가 꺼져 있거나 glob이 파일을 못 찾으면 경고). 항상 0.
 #
 # 설정 (.claude/hooks/checks.env):
 #   SPEC_FILE       spec 경로 (기본 docs/SPEC.md)
@@ -121,6 +122,33 @@ if [[ $mode == summary ]]; then
     fi
   done
   echo "합계: Must ${must}개 중 Done ${must_done}개 · [미정] ${und} · [제안] ${prop}"
+  # 시험 연결: 진행 중·완료 기능의 자동 시나리오가 시험에 ID로 이어져 있는가.
+  # 검사가 꺼져 있거나 glob이 아무 파일도 못 찾으면 조용히 넘기지 않고 알린다(검사가 꺼진 줄 모르고 Done을 믿게 되므로).
+  active=0 done_cnt=0 s_auto=0 s_cov=0 missing=()
+  for f in "${feats[@]}"; do
+    [[ ${f_state[$f]} == Done || ${f_state[$f]} == 'In Progress' ]] || continue
+    (( active++ )); [[ ${f_state[$f]} == Done ]] && (( done_cnt++ ))
+    for id in ${f_scen[$f]}; do
+      auto_scen "$id" || continue
+      (( s_auto++ ))
+      if has_test "$id"; then (( s_cov++ )); else missing+=("$id"); fi
+    done
+  done
+  if (( active )); then
+    if [[ -z $SPEC_TEST_GLOB ]]; then
+      echo "⚠ 커버리지 검사 꺼짐: .claude/hooks/checks.env의 SPEC_TEST_GLOB가 비어 있다 — 진행 중·완료 기능 ${active}개(Done ${done_cnt}개)의 시나리오가 시험으로 지켜지는지 알 수 없고 Done·릴리즈 게이트가 동작하지 않는다. 시험 위치를 채운다"
+    elif (( test_files == 0 )); then
+      echo "⚠ SPEC_TEST_GLOB('$SPEC_TEST_GLOB')에 맞는 시험 파일이 0개 — 경로를 확인한다"
+    else
+      line="시험 연결: 진행 중·완료 기능의 자동 시나리오 ${s_auto}개 중 ${s_cov}개 (시험 파일 ${test_files}개)"
+      if (( ${#missing[@]} )); then
+        shown=("${missing[@]:0:10}")
+        line+=" — 시험 없음: ${shown[*]}"
+        (( ${#missing[@]} > 10 )) && line+=" 외 $(( ${#missing[@]} - 10 ))개"
+      fi
+      echo "$line"
+    fi
+  fi
   if [[ -n $next_go ]]; then echo "다음 후보: $next_go ${f_name[$next_go]} (판단 남은 것 없음 — 진행 가능)"; fi
   if [[ -n $next_ask ]]; then echo "판단 필요: $next_ask ${f_name[$next_ask]} ([미정]·[제안]을 먼저 묻는다)"; fi
   exit 0
