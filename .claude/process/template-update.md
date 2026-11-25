@@ -1,6 +1,6 @@
 # 템플릿 업데이트
 
-이 프로젝트를 만든 템플릿([huny4daniel/huny4daniels-TEMPLATE](https://github.com/huny4daniel/huny4daniels-TEMPLATE))이 갱신되면, 프로젝트에서 `/adopt`를 실행해 반영한다 (업데이트 모드). copier·cruft 같은 템플릿 도구와 같은 방식이다: **적용한 템플릿 버전을 기록해 두고, 그 이후 템플릿에서 바뀐 부분만 가져온다.**
+이 프로젝트를 만든 템플릿(`.template-version`의 `repo=`가 가리키는 저장소, 기본은 [huny4daniel/huny4daniels-TEMPLATE](https://github.com/huny4daniel/huny4daniels-TEMPLATE))이 갱신되면, 프로젝트에서 `/adopt`를 실행해 반영한다 (업데이트 모드). copier·cruft 같은 템플릿 도구와 같은 방식이다: **적용한 템플릿 버전을 기록해 두고, 그 이후 템플릿에서 바뀐 부분만 가져온다.**
 
 `/adopt`는 실행 시점의 최신 템플릿에 있는 이 문서를 기준으로 동작한다. 아래 목록을 고치면 다음 업데이트부터 반영된다.
 
@@ -14,6 +14,7 @@ scale=full   # 또는 lite (1단계에서 정함)
 ```
 
 - 새 프로젝트 생성(`/adopt` 새 프로젝트 모드, `new-project.ps1`)과 기존 프로젝트 도입 때 자동으로 만든다. GitHub "Use this template"으로 만든 경우 0단계에서 만든다.
+- `repo=`는 프로젝트를 만든 템플릿 저장소다. 템플릿을 포크해 쓰면 포크 주소가 들어가고, 업데이트 확인과 `/adopt` 업데이트 모드는 이 저장소를 받는다.
 - 업데이트를 반영할 때마다 갱신한다. 사람이 고치지 않는다.
 
 ## 파일 소유 구분

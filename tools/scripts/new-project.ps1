@@ -29,7 +29,11 @@ if ($LASTEXITCODE -ge 8) { throw "복사 실패 (robocopy $LASTEXITCODE)" }
 # 적용한 템플릿 버전 기록 (.claude/process/template-update.md)
 $sha = (git -C $template rev-parse HEAD).Trim()
 if (git -C $template status --porcelain) { Write-Warning "템플릿 폴더에 커밋되지 않은 변경이 있습니다. 기록되는 버전($sha)과 실제 복사된 내용이 다를 수 있습니다." }
-$ver = "repo=huny4daniel/huny4daniels-TEMPLATE`ncommit=$sha`ndate=$(Get-Date -Format yyyy-MM-dd)`n"
+# repo= 는 템플릿 폴더의 origin에서 읽는다 (포크해서 쓰면 포크 주소가 기록되도록). 없으면 원본 저장소.
+$repo = 'huny4daniel/huny4daniels-TEMPLATE'
+$origin = git -C $template remote get-url origin 2>$null
+if ($origin -match 'github\.com[:/]([^/]+/[^/]+?)(\.git)?/?$') { $repo = $Matches[1] }
+$ver = "repo=$repo`ncommit=$sha`ndate=$(Get-Date -Format yyyy-MM-dd)`n"
 [IO.File]::WriteAllText((Join-Path $target '.template-version'), $ver, (New-Object Text.UTF8Encoding $false))
 
 # 프로젝트 이름 자리표시자 치환
