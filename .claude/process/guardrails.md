@@ -79,7 +79,7 @@ $found
 - `Planned`·`In Progress` 기능은 검사하지 않는다. 개발 중에 매번 막히지 않게 하고, 규칙을 **"Done이라고 적으려면 시나리오마다 테스트가 있어야 한다"**로 둔다.
 - 테스트에만 있고 spec에 없는 ID는 참고로 알린다(실패 아님).
 - 실행 시점: Stop 훅(SPEC.md나 코드가 바뀌었을 때 — spec만 바뀌면 타입 체크·테스트는 돌리지 않고 이 검사만), CI(`ci.yml`의 spec 커버리지 스텝), 릴리즈 전(06-release.md).
-- 설정: `checks.env`의 `SPEC_FILE`, `SPEC_TEST_GLOB`. glob이 비어 있으면 검사하지 않는다. 3단계 Walking Skeleton에서 채운다.
+- 설정: `checks.env`의 `SPEC_FILE`, `SPEC_TEST_GLOB`. glob이 비어 있으면 검사하지 않는다. 3단계 Walking Skeleton에서 채운다(기존 프로젝트 도입은 도입할 때). 비어 있는데 진행 중·완료 기능이 있거나 glob이 파일을 하나도 못 찾으면 `--summary`(`/next` 브리핑)가 경고하고, 5·6단계 게이트는 통과로 보지 않는다.
 - **요약**: `bash .claude/hooks/spec-coverage.sh --summary`는 기능별 우선순위·상태·`[미정]`·`[제안]` 수와 커버리지, 다음 후보를 한 화면으로 출력한다. `/next`와 세션 시작 브리핑이 SPEC.md 전체 대신 이것을 읽는다.
 - **한계**: ID가 테스트 파일에 있는지만 본다. 그 테스트가 시나리오를 제대로 검증하는지는 `/review`와 5단계 spec 대조가 본다. 기계는 존재를, 리뷰는 의미를 본다.
 

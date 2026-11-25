@@ -158,6 +158,31 @@ set_scenario() { sed -i "s/\*\*$1\*\* \(.*\) \[[^]]*\]/**$1** \1 [$2]/" docs/SPE
   done
 }
 
+@test "spec-coverage: summary shows test link count and untested scenario IDs" {
+  out=$(cov --summary)
+  [[ $out == *"시험 연결: 진행 중·완료 기능의 자동 시나리오 3개 중 1개 (시험 파일 1개) — 시험 없음: F-01.2 F-02.1"* ]] || { echo "$out"; return 1; }
+}
+
+@test "spec-coverage: summary warns when check is off with active features" {
+  write_env ""
+  out=$(cov --summary)
+  [[ $out == *"⚠ 커버리지 검사 꺼짐"*"Done 1개"* ]] || { echo "$out"; return 1; }
+  [[ $out != *"시험 연결"* ]] || { echo "$out"; return 1; }
+}
+
+@test "spec-coverage: summary warns when glob matches no files" {
+  write_env "nowhere/**/*.py"
+  out=$(cov --summary)
+  [[ $out == *"맞는 시험 파일이 0개"* ]] || { echo "$out"; return 1; }
+}
+
+@test "spec-coverage: no warning when nothing is in progress or done" {
+  write_env ""
+  sed -i 's/— Must · Done/— Must · Planned/; s/— Must · In Progress/— Must · Planned/' docs/SPEC.md
+  out=$(cov --summary)
+  [[ $out != *"⚠"* ]] || { echo "$out"; return 1; }
+}
+
 @test "spec-coverage: summary suggests next Must without pending decisions" {
   set_scenario F-02.2 확정
   out=$(cov --summary)
