@@ -8,3 +8,4 @@
 .github/workflows/template-ci.yml
 tools/scripts/new-project.ps1
 .github/agent-evals/
+LICENSE

@@ -191,3 +191,4 @@ claude plugin update project-process@huny4daniels
 - 훅을 고치는 커밋에는 `.github/hook-tests/`의 케이스 추가를 함께 넣는다. 로컬 실행: `bats .github/hook-tests` ([bats-core](https://github.com/bats-core/bats-core) 1.11).
 - 에이전트 행동 평가: `bash .github/agent-evals/run.sh [케이스]` — 상태가 정해진 예시 프로젝트를 headless Claude로 돌려 규칙을 지키는지(`[미정]`에서 멈추는가, `[제안]`을 혼자 확정하지 않는가 등) 결정론적으로 채점한다. 구독 사용량을 쓰므로 CI가 아니라 절차·명령을 바꿀 때 수동으로 돌린다. 결과는 `.github/agent-evals/results/`(git 제외)와 ROADMAP H2에 남긴다.
 - 개선 계획: [ROADMAP.md](ROADMAP.md)
+- 라이선스: [MIT](../LICENSE). 템플릿 전용이라 새 프로젝트로 복사되지 않는다 — 프로젝트의 라이선스는 각자 정한다(루트 README의 라이선스 칸).
