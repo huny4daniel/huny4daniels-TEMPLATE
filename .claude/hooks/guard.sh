@@ -3,7 +3,7 @@
 # 사람 확인을 받는다. 막지 않고 permissionDecision "ask"로 확인 창만 띄운다.
 #
 #   1) main 반영·태그·릴리즈: main/master push, 태그 push, force push, 원격 삭제,
-#      gh pr merge(CI 실패·진행 중이면 deny), gh release create/delete/edit
+#      gh pr merge·REST 병합(CI 실패·진행 중이면 deny), gh release create/delete/edit
 #   2) 삭제·되돌리기 불가: rm -r, Remove-Item -Recurse, git reset --hard, git clean -f,
 #      git branch -D, 작업 내용 폐기(checkout/restore .), gh repo/release delete
 #   3) 배포: 패키지 저장소 publish, docker push, 클라우드·서버 배포 명령
@@ -120,10 +120,9 @@ fi
 # ---------- 1) main 반영·태그·릴리즈 ----------
 # PR 병합: 먼저 CI 상태를 조회한다. 실패·진행 중이면 거부, 통과면 사람 확인.
 # (GitHub 보호 규칙의 "CI 통과 필수"를 비공개 저장소에서도 대신하기 위함)
-if has 'gh[[:space:]]+pr[[:space:]]+merge'; then
-  # 'gh pr merge <번호|브랜치|URL>'의 대상. 없으면 현재 브랜치의 PR.
-  target=""
-  [[ $cmd =~ gh[[:space:]]+pr[[:space:]]+merge[[:space:]]+([^-[:space:]][^[:space:]]*) ]] && target=${BASH_REMATCH[1]}
+# gh pr merge가 실패해 REST(gh api ... pulls/<번호>/merge)로 우회해도 같은 검사를 거친다.
+check_merge() {  # $1 대상(PR 번호·브랜치·URL, 비면 현재 브랜치의 PR)
+  local target=$1 checks rc summary
   # shellcheck disable=SC2086  # target이 비어 있으면 인자를 넘기지 않기 위해 따옴표 없이 쓴다
   checks="$(cd "${CLAUDE_PROJECT_DIR:-.}" 2>/dev/null && gh pr checks $target 2>&1)"
   rc=$?
@@ -141,6 +140,18 @@ if has 'gh[[:space:]]+pr[[:space:]]+merge'; then
   fi
   shopt -u nocasematch
   ask "[main 반영] PR 병합입니다. CI 상태를 확인하지 못했습니다 ($summary). CI 통과 여부를 직접 확인하세요."
+}
+if has 'gh[[:space:]]+pr[[:space:]]+merge'; then
+  # 'gh pr merge <번호|브랜치|URL>'의 대상. 없으면 현재 브랜치의 PR.
+  target=""
+  [[ $cmd =~ gh[[:space:]]+pr[[:space:]]+merge[[:space:]]+([^-[:space:]][^[:space:]]*) ]] && target=${BASH_REMATCH[1]}
+  check_merge "$target"
+fi
+if has 'gh[[:space:]]+api[^|;&]*repos/[^[:space:]/]+/[^[:space:]/]+/pulls/[0-9]+/merge' \
+   && { has '(-X|--method)[[:space:]]*"?(PUT|POST)' || has '[[:space:]](-f|-F|--field|--raw-field|--input)[[:space:]]'; }; then
+  # 쓰기 요청만 병합이다 (GET은 병합 여부 조회)
+  [[ $cmd =~ repos/[^[:space:]/]+/[^[:space:]/]+/pulls/([0-9]+)/merge ]]
+  check_merge "${BASH_REMATCH[1]}"
 fi
 if has 'gh[[:space:]]+release[[:space:]]+(create|delete|edit|upload)'; then
   ask "[릴리즈] GitHub 릴리즈 생성·수정·삭제입니다. (.claude/process/06-release.md)"

@@ -95,7 +95,7 @@
 
 | 시점 | 장치 | 동작 |
 |---|---|---|
-| 셸 명령 직전 | `guard.sh` (PreToolUse) | main/태그/force push, PR 병합, 릴리즈, 재귀 삭제, 배포, 외부 API 쓰기, **셸로 비밀 파일 다루기** → 확인 창. PR 병합은 `gh pr checks`로 CI를 조회해 실패·진행 중이면 거부. 판정 대상은 명령 문자열뿐이고(description·cwd 무시), main push는 `git push`의 대상·현재 브랜치·upstream으로 판정 |
+| 셸 명령 직전 | `guard.sh` (PreToolUse) | main/태그/force push, PR 병합, 릴리즈, 재귀 삭제, 배포, 외부 API 쓰기, **셸로 비밀 파일 다루기** → 확인 창. PR 병합(`gh pr merge`, REST 병합 포함)은 `gh pr checks`로 CI를 조회해 실패·진행 중이면 거부. 판정 대상은 명령 문자열뿐이고(description·cwd 무시), main push는 `git push`의 대상·현재 브랜치·upstream으로 판정 |
 | 파일 수정 직후 | `check-file.sh` (PostToolUse) | 포매터·린터 실행, 오류면 에이전트에게 되돌림 |
 | 응답 종료 시 | `check-turn.sh` (Stop) | 코드가 바뀌었으면 린트·타입 체크·테스트, 실패면 종료를 막고 고치게 함 (같은 상태 재검사 생략, 반복 방지) |
 | spec 수정 직전 | `spec-confirm.sh` (PreToolUse) | **판단은 사람이**: SPEC.md의 `[제안]`·`[미정]`을 `[확정]`으로 바꾸는 수정에 확인 창을 띄운다(여러 개면 창 하나에 목록). 수정 조각이 아니라 파일 전체의 수정 전후로 판정해 ID 없이 표시만 바꾸는 수정도 잡는다 |

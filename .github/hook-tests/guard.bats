@@ -123,6 +123,19 @@ merge_case() {  # $1 기대값  $2 FAKE_GH_MODE  $3 명령
   merge_case deny fail 'gh pr merge --squash' >/dev/null
   expect "pr checks 12|pr checks feature/1-x|pr checks" "$(paste -sd'|' "$FAKE_GH_LOG")" "gh 호출 인자"
 }
+# REST 병합(gh pr merge 실패 뒤 우회): 같은 CI 검사를 거친다
+@test "gh api pulls/N/merge (write): same CI check as gh pr merge" {
+  expect ask "$(merge_case ask pass 'gh api -X PUT repos/o/r/pulls/3/merge -f merge_method=squash')" pass
+  expect deny "$(merge_case deny fail 'gh api -X PUT repos/o/r/pulls/3/merge -f merge_method=squash')" fail
+  expect deny "$(merge_case deny pending 'gh api --method PUT /repos/o/r/pulls/3/merge')" pending
+  export FAKE_GH_LOG; FAKE_GH_LOG=$(mktemp)
+  merge_case deny fail 'gh api -X PUT repos/o/r/pulls/42/merge' >/dev/null
+  expect "pr checks 42" "$(cat "$FAKE_GH_LOG")" "gh 호출 인자"
+}
+# REST 병합 여부 조회(GET)는 병합이 아니다
+@test "gh api pulls/N/merge (read): pass" {
+  expect pass "$(merge_case pass fail 'gh api repos/o/r/pulls/3/merge')" "GET"
+}
 
 # ---------- 성능: 모든 셸 명령마다 실행되므로 빠른 통과 경로가 프로세스를 만들지 않아야 함 ----------
 
