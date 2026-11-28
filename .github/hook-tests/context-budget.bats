@@ -7,7 +7,7 @@
 ROOT="$BATS_TEST_DIRNAME/../.."
 
 # 바이트 기준 (한글은 UTF-8로 3바이트)
-TOTAL_MAX=16384
+TOTAL_MAX=16896  # ROADMAP D3 "상한 조정"
 declare -gA FILE_MAX=(
   [CLAUDE.md]=1024
   [AGENTS.md]=5120
