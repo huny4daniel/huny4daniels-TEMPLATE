@@ -17,6 +17,8 @@ claude plugin install project-process@huny4daniels
 
 ## 도입 원칙
 
+0. **설명 수준 먼저** — 어느 경로든 시작할 때 STATUS.md "설명 수준"이 비어 있으면 먼저 묻는다([00-init.md](00-init.md) "설명 수준"). 도입 경로에서는 STATUS.md를 만든 뒤 그 값을 적는다.
+
 1. **비침습 추가** — 문서·에이전트 설정·이슈/PR 템플릿만 추가한다. 이미 있는 파일(CLAUDE.md, AGENTS.md, README, .gitignore, CI, release 워크플로)은 덮어쓰지 않고 필요한 부분만 합친다.
 2. **역방향 문서화** — 코드에서 현재 상태를 읽어 문서를 만든다. Claude가 초안을 쓰고 사람은 확인만 한다.
    - `docs/architecture/overview.md`: 현재 구조
