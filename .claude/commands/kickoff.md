@@ -9,6 +9,7 @@ argument-hint: [아이디어 한 줄, 생략 가능]
 
 1. **0단계 점검**
    - README.md, AGENTS.md, docs/STATUS.md를 읽는다.
+   - STATUS.md "설명 수준"이 비어 있으면 가장 먼저 AskUserQuestion으로 묻는다(입문 / 보통 / 전문, 기준은 .claude/process/00-init.md "설명 수준"). 이후 모든 질문과 설명을 그 수준에 맞춘다.
    - 프로젝트 이름 자리표시자(`{{PROJECT_NAME}}`, `{{제품 이름}}`)가 남아 있으면 이름을 물어 채운다. 스택 관련 자리표시자는 2단계까지 그대로 둔다.
    - git 원격 연결 여부를 확인하고, 없으면 [요청]으로 안내만 한다.
    - docs/STATUS.md: 0단계 체크, 현재 단계를 1로, 처음 아이디어를 세션 로그에 기록.
