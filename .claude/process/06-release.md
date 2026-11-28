@@ -7,6 +7,7 @@
 2. Claude가 `.claude/templates/release-checklist.md`로 점검하고 버전을 제안한다 (SemVer: 호환 깨짐 MAJOR / 기능 추가 MINOR / 수정 PATCH, 1.0.0 전에는 MINOR로 호환 깨짐 허용).
 3. CHANGELOG `[Unreleased]` → `[X.Y.Z] - 날짜`.
 4. **[승인 요청]** 후 `release/vX.Y.Z` 브랜치에서 커밋 → PR → CI 통과 → squash 병합 → `main`을 pull해 그 커밋에 `git tag vX.Y.Z` → 태그 push → 릴리즈 ADR에서 정한 방식대로 배포 결과 확인. 태그는 항상 `main`에서 붙인다.
+   main 직접 커밋 프로젝트는 `release/` 브랜치를 쓰지 않는다: 3번의 CHANGELOG·버전 변경을 마지막 작업 커밋에 함께 넣고(push 전이면 amend) 그 커밋에 태그 → 커밋과 태그를 함께 push. 배포 결과 기록은 바로 커밋하지 않고 다음 작업 커밋으로 넘긴다([git-flow.md](git-flow.md) "main 직접 커밋을 쓰는 경우").
 5. **[요청]** 배포물을 실제 설치해 확인.
 
 → [07-retro.md](07-retro.md)

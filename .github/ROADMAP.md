@@ -361,6 +361,14 @@ Spec Kit은 spec → 구현에 집중하고, spec과 코드의 대조(analyze·c
 
 **방법**: 커밋은 작업 끝에 한 번, push는 PR 생성·CI 실패 수정·세션 종료 때만, 한 세션의 관련 작업은 브랜치·PR 하나로(큰 기능만 따로). git-flow.md·04-build.md·AGENTS.md·CONTRIBUTING.md를 함께 고치고, 사용자 전역 CLAUDE.md의 "커밋 후 push"도 같은 규칙으로 바꿨다.
 
+### D8. main 직접 커밋 프로젝트의 기록용 커밋 줄이기
+
+- [x] 완료 — docs/main-direct-commit PR (2026-11-28)
+
+**문제**: D7 뒤에도 main 직접 커밋을 고른 프로젝트에서 하루 릴리즈 3번에 커밋 26개, 그중 10개 정도가 문서 기록용이었다. 템플릿이 squash 병합으로 단계별 커밋이 합쳐진다고 전제해, 그 전제가 없는 경우의 규칙이 없었다. 따로 생긴 커밋: 릴리즈 준비(CHANGELOG·버전), 태그 뒤 배포 결과 기록, `/wrap` 마무리, 사람 확인·모드 전환·Gotchas·"기능 완료" 기록.
+
+**방법**: git-flow.md에 "main 직접 커밋을 쓰는 경우" 소절 — 릴리즈 준비는 마지막 작업 커밋에 넣고 그 커밋에 태그, 기록만 바뀐 것은 작업 트리에 두고 다음 작업 커밋에 함께(세션 종료 때 기록만 남았을 때만 커밋 하나), push 전 직전 커밋에 붙는 수정은 amend. 06-release.md·wrap.md 커밋 단계에 분기, AGENTS.md 작업 규칙 4에 "Git 흐름" 선택 줄, CONTRIBUTING.md·PROCESS.md 게이트 문구에 가리키는 말.
+
 ---
 
 ## E. 확장
